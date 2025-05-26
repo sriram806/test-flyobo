@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import { faqs } from '@/lib/data';
+import { faqData } from '@/lib/data';
 import { 
   Accordion,
   AccordionContent,
@@ -32,7 +32,7 @@ export function FAQSection() {
         
         <div className="max-w-3xl mx-auto">
           <Accordion type="multiple" value={expandedItems} className="space-y-4">
-            {faqs.map((faq) => (
+            {faqData.map((faq) => (
               <AccordionItem 
                 key={faq.id} 
                 value={`item-${faq.id}`}
