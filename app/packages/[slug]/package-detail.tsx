@@ -121,165 +121,167 @@ export default function PackageDetail() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      {/* Hero Section with Gallery */}
-      <div className="relative h-[70vh] overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors duration-500">
+      {/* Enhanced Hero Section with Parallax Effect */}
+      <div className="relative h-[90vh] overflow-hidden">
         <div className="absolute inset-0">
           <img
             src={packageData.image}
             alt={packageData.name}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover transform scale-105 transition-transform duration-[2s] hover:scale-110"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-black/40 dark:from-black/90 dark:via-black/70 dark:to-black/50 transition-colors duration-500"></div>
         </div>
 
-        {/* Top Bar */}
-        <div className="absolute top-0 left-0 right-0 p-4 md:p-8 flex justify-between items-center">
-          <Link
-            href="/packages"
-            className="flex items-center gap-2 text-white bg-black/30 hover:bg-black/50 backdrop-blur-sm rounded-full px-4 py-2 text-sm transition-all hover:scale-105"
-          >
-            <ChevronLeft className="h-4 w-4" />
-            Back to Packages
-          </Link>
-
-          <div className="flex items-center gap-3">
-            <button
-              className="text-white bg-black/30 hover:bg-black/50 backdrop-blur-sm rounded-full p-2 transition-all hover:scale-105"
-              onClick={() => setIsFavorite(!isFavorite)}
+        {/* Enhanced Top Bar with Glass Effect */}
+        <div className="absolute top-0 left-0 right-0 p-6 md:p-8">
+          <div className="max-w-7xl mx-auto flex justify-between items-center">
+            <Link
+              href="/packages"
+              className="flex items-center gap-2 text-white bg-white/10 hover:bg-white/20 dark:bg-black/30 dark:hover:bg-black/40 backdrop-blur-xl rounded-full px-6 py-3 text-sm transition-all duration-300 hover:scale-105 group border border-white/20 dark:border-white/10"
             >
-              <Heart className={`h-5 w-5 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
-            </button>
-            <div className="relative">
-              <button
-                className="flex items-center gap-2 text-white bg-black/30 hover:bg-black/50 backdrop-blur-sm rounded-full px-4 py-2 text-sm transition-all hover:scale-105"
-                onClick={() => setShowShareOptions(!showShareOptions)}
-              >
-                <Share2 className="h-4 w-4" />
-                Share
-              </button>
+              <ChevronLeft className="h-4 w-4 transform transition-transform group-hover:-translate-x-1" />
+              Back to Packages
+            </Link>
 
-              {showShareOptions && (
-                <div className="absolute top-full right-0 mt-2 bg-white dark:bg-gray-800 rounded-xl shadow-xl p-3 w-48">
-                  <div className="grid grid-cols-2 gap-2">
+            <div className="flex items-center gap-4">
+              <button
+                className="text-white bg-white/10 hover:bg-white/20 dark:bg-black/30 dark:hover:bg-black/40 backdrop-blur-xl rounded-full p-3 transition-all duration-300 hover:scale-105 border border-white/20 dark:border-white/10"
+                onClick={() => setIsFavorite(!isFavorite)}
+              >
+                <Heart className={`h-5 w-5 transform transition-all duration-500 ${isFavorite ? 'fill-red-500 text-red-500 scale-110' : ''}`} />
+              </button>
+              <div className="relative">
+                <button 
+                  className="flex items-center gap-2 text-white bg-white/10 hover:bg-white/20 dark:bg-black/30 dark:hover:bg-black/40 backdrop-blur-xl rounded-full px-6 py-3 text-sm transition-all duration-300 hover:scale-105 border border-white/20 dark:border-white/10"
+                  onClick={() => setShowShareOptions(!showShareOptions)}
+                >
+                  <Share2 className="h-4 w-4" />
+                  Share
+                </button>
+                
+                {showShareOptions && (
+                  <div className="absolute top-full right-0 mt-2 bg-white/90 dark:bg-gray-900/90 rounded-2xl shadow-xl p-4 w-56 backdrop-blur-xl border border-white/20 dark:border-gray-700/50 animate-in fade-in slide-in-from-top-2 duration-200">
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        className="flex items-center gap-2 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg text-sm transition-colors"
+                        onClick={() => handleShare('whatsapp')}
+                      >
+                        <span className="bg-green-500 text-white p-1.5 rounded-lg">
+                          <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+                          </svg>
+                        </span>
+                        WhatsApp
+                      </button>
+                      <button
+                        className="flex items-center gap-2 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg text-sm transition-colors"
+                        onClick={() => handleShare('facebook')}
+                      >
+                        <span className="bg-blue-600 text-white p-1.5 rounded-lg">
+                          <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M9.198 21.5h4v-8.01h3.604l.396-3.98h-4V7.5a1 1 0 0 1 1-1h3v-4h-3a5 5 0 0 0-5 5v2.01h-2l-.396 3.98h2.396v8.01Z" />
+                          </svg>
+                        </span>
+                        Facebook
+                      </button>
+                      <button
+                        className="flex items-center gap-2 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg text-sm transition-colors"
+                        onClick={() => handleShare('twitter')}
+                      >
+                        <span className="bg-blue-400 text-white p-1.5 rounded-lg">
+                          <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M19.633 7.997c.013.175.013.349.013.523 0 5.325-4.053 11.461-11.46 11.461-2.282 0-4.402-.661-6.186-1.809.324.037.636.05.973.05a8.07 8.07 0 0 0 5.001-1.721 4.036 4.036 0 0 1-3.767-2.793c.249.037.499.062.761.062.361 0 .724-.05 1.061-.137a4.027 4.027 0 0 1-3.23-3.953v-.05c.537.299 1.16.486 1.82.511a4.022 4.022 0 0 1-1.796-3.354c0-.748.199-1.434.548-2.032a11.457 11.457 0 0 0 8.306 4.215c-.062-.3-.1-.611-.1-.923a4.026 4.026 0 0 1 4.028-4.028c1.16 0 2.207.486 2.943 1.272a7.957 7.957 0 0 0 2.556-.973 4.02 4.02 0 0 1-1.771 2.22 8.073 8.073 0 0 0 2.319-.624 8.645 8.645 0 0 1-2.019 2.083z" />
+                          </svg>
+                        </span>
+                        Twitter
+                      </button>
+                      <button
+                        className="flex items-center gap-2 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg text-sm transition-colors"
+                        onClick={() => handleShare('email')}
+                      >
+                        <span className="bg-gray-500 text-white p-1.5 rounded-lg">
+                          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                          </svg>
+                        </span>
+                        Email
+                      </button>
+                    </div>
+                    <Separator className="my-2" />
                     <button
-                      className="flex items-center gap-2 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg text-sm transition-colors"
-                      onClick={() => handleShare('whatsapp')}
+                      className="flex items-center gap-2 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg w-full text-sm transition-colors"
+                      onClick={() => handleShare('copy')}
                     >
-                      <span className="bg-green-500 text-white p-1.5 rounded-lg">
-                        <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
-                        </svg>
-                      </span>
-                      WhatsApp
-                    </button>
-                    <button
-                      className="flex items-center gap-2 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg text-sm transition-colors"
-                      onClick={() => handleShare('facebook')}
-                    >
-                      <span className="bg-blue-600 text-white p-1.5 rounded-lg">
-                        <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M9.198 21.5h4v-8.01h3.604l.396-3.98h-4V7.5a1 1 0 0 1 1-1h3v-4h-3a5 5 0 0 0-5 5v2.01h-2l-.396 3.98h2.396v8.01Z" />
-                        </svg>
-                      </span>
-                      Facebook
-                    </button>
-                    <button
-                      className="flex items-center gap-2 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg text-sm transition-colors"
-                      onClick={() => handleShare('twitter')}
-                    >
-                      <span className="bg-blue-400 text-white p-1.5 rounded-lg">
-                        <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M19.633 7.997c.013.175.013.349.013.523 0 5.325-4.053 11.461-11.46 11.461-2.282 0-4.402-.661-6.186-1.809.324.037.636.05.973.05a8.07 8.07 0 0 0 5.001-1.721 4.036 4.036 0 0 1-3.767-2.793c.249.037.499.062.761.062.361 0 .724-.05 1.061-.137a4.027 4.027 0 0 1-3.23-3.953v-.05c.537.299 1.16.486 1.82.511a4.022 4.022 0 0 1-1.796-3.354c0-.748.199-1.434.548-2.032a11.457 11.457 0 0 0 8.306 4.215c-.062-.3-.1-.611-.1-.923a4.026 4.026 0 0 1 4.028-4.028c1.16 0 2.207.486 2.943 1.272a7.957 7.957 0 0 0 2.556-.973 4.02 4.02 0 0 1-1.771 2.22 8.073 8.073 0 0 0 2.319-.624 8.645 8.645 0 0 1-2.019 2.083z" />
-                        </svg>
-                      </span>
-                      Twitter
-                    </button>
-                    <button
-                      className="flex items-center gap-2 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg text-sm transition-colors"
-                      onClick={() => handleShare('email')}
-                    >
-                      <span className="bg-gray-500 text-white p-1.5 rounded-lg">
+                      <span className="bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 p-1.5 rounded-lg">
                         <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
                         </svg>
                       </span>
-                      Email
+                      Copy Link
                     </button>
                   </div>
-                  <Separator className="my-2" />
-                  <button
-                    className="flex items-center gap-2 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg w-full text-sm transition-colors"
-                    onClick={() => handleShare('copy')}
-                  >
-                    <span className="bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 p-1.5 rounded-lg">
-                      <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                      </svg>
-                    </span>
-                    Copy Link
-                  </button>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </div>
         </div>
-
-        {/* Package Info */}
-        <div className="absolute bottom-0 left-0 right-0 p-8">
-          <div className="max-w-6xl mx-auto">
-            <div className="flex flex-wrap items-center gap-4 text-white/80 mb-4">
-              <div className="flex items-center gap-2">
+        
+        {/* Enhanced Package Info with Floating Elements */}
+        <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex flex-wrap items-center gap-6 text-white/90 mb-8">
+              <div className="flex items-center gap-2 bg-white/10 dark:bg-black/30 backdrop-blur-xl px-6 py-3 rounded-full border border-white/20 dark:border-white/10 transform hover:scale-105 transition-all duration-300">
                 <MapPin className="h-5 w-5" />
-                <span>{packageData.location}</span>
+                <span className="text-sm font-medium">{packageData.location}</span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 bg-white/10 dark:bg-black/30 backdrop-blur-xl px-6 py-3 rounded-full border border-white/20 dark:border-white/10 transform hover:scale-105 transition-all duration-300">
                 <Clock className="h-5 w-5" />
-                <span>{packageData.duration}</span>
+                <span className="text-sm font-medium">{packageData.duration}</span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 bg-white/10 dark:bg-black/30 backdrop-blur-xl px-6 py-3 rounded-full border border-white/20 dark:border-white/10 transform hover:scale-105 transition-all duration-300">
                 <Star className="h-5 w-5 text-yellow-400" />
-                <span>{packageData.rating} ({packageData.reviewCount} reviews)</span>
+                <span className="text-sm font-medium">{packageData.rating} ({packageData.reviewCount} reviews)</span>
               </div>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            <h1 className="text-6xl md:text-7xl font-bold text-white mb-8 leading-tight tracking-tight">
               {packageData.name}
             </h1>
-            <p className="text-xl text-white/90 max-w-3xl">
+            <p className="text-2xl text-white/90 max-w-3xl leading-relaxed">
               {packageData.description}
             </p>
           </div>
         </div>
       </div>
-
-      {/* Main Content */}
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      
+      {/* Enhanced Main Content with Glass Cards */}
+      <div className="container mx-auto px-4 py-20">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
           {/* Package Details */}
-          <div className="lg:col-span-2 space-y-8">
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden">
+          <div className="lg:col-span-2 space-y-12">
+            <div className="bg-white/80 dark:bg-gray-800/80 rounded-3xl shadow-2xl overflow-hidden border border-gray-100/50 dark:border-gray-700/50 backdrop-blur-xl transition-colors duration-500">
               <Tabs defaultValue="overview" className="w-full">
-                <div className="border-b border-gray-200 dark:border-gray-700">
+                <div className="border-b border-gray-200/50 dark:border-gray-700/50">
                   <TabsList className="w-full justify-start p-0 bg-transparent">
-                    <TabsTrigger value="overview" className="px-6 py-4 data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-none border-b-2 border-transparent data-[state=active]:border-primary">
+                    <TabsTrigger value="overview" className="px-8 py-5 data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-none border-b-2 border-transparent data-[state=active]:border-primary text-base font-medium transition-all duration-300">
                       Overview
                     </TabsTrigger>
-                    <TabsTrigger value="gallery" className="px-6 py-4 data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-none border-b-2 border-transparent data-[state=active]:border-primary">
+                    <TabsTrigger value="gallery" className="px-8 py-5 data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-none border-b-2 border-transparent data-[state=active]:border-primary text-base font-medium">
                       Gallery
                     </TabsTrigger>
-                    <TabsTrigger value="inclusions" className="px-6 py-4 data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-none border-b-2 border-transparent data-[state=active]:border-primary">
+                    <TabsTrigger value="inclusions" className="px-8 py-5 data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-none border-b-2 border-transparent data-[state=active]:border-primary text-base font-medium">
                       Inclusions & Exclusions
                     </TabsTrigger>
-                    <TabsTrigger value="itinerary" className="px-6 py-4 data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-none border-b-2 border-transparent data-[state=active]:border-primary">
+                    <TabsTrigger value="itinerary" className="px-8 py-5 data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-none border-b-2 border-transparent data-[state=active]:border-primary text-base font-medium">
                       Itinerary
                     </TabsTrigger>
-                    <TabsTrigger value="policies" className="px-6 py-4 data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-none border-b-2 border-transparent data-[state=active]:border-primary">
+                    <TabsTrigger value="policies" className="px-8 py-5 data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-none border-b-2 border-transparent data-[state=active]:border-primary text-base font-medium">
                       Policies
                     </TabsTrigger>
                   </TabsList>
                 </div>
 
-                <div className="p-6">
+                <div className="p-8">
                   <TabsContent value="overview" className="space-y-6">
                     <div className="prose dark:prose-invert max-w-none">
                       <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed">
@@ -608,17 +610,19 @@ export default function PackageDetail() {
               </Tabs>
             </div>
           </div>
-
-          {/* Booking Form */}
+          
+          {/* Enhanced Booking Form with Glass Effect */}
           <div className="lg:col-span-1">
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 sticky top-24 border border-gray-200 dark:border-gray-700">
+            <div className="bg-white/80 dark:bg-gray-800/80 rounded-3xl shadow-2xl p-8 sticky top-24 border border-gray-100/50 dark:border-gray-700/50 backdrop-blur-xl transition-colors duration-500">
               <div className="mb-8">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Book This Package</h2>
-                <div className="flex items-baseline justify-between bg-gray-50 dark:bg-gray-900/50 p-4 rounded-xl border border-gray-100 dark:border-gray-700">
-                  <span className="text-sm text-gray-500 dark:text-gray-400">Starting from</span>
-                  <div className="text-right">
-                    <p className="text-3xl font-bold text-primary">₹{packageData.price.toLocaleString()}</p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">per person</p>
+                <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6 transition-colors duration-500">Book This Package</h2>
+                <div className="bg-gradient-to-r from-primary/10 to-primary/20 dark:from-primary/20 dark:to-primary/30 p-8 rounded-2xl border border-primary/20 dark:border-primary/30 transform hover:scale-[1.02] transition-all duration-500">
+                  <div className="flex items-baseline justify-between">
+                    <span className="text-sm text-gray-500 dark:text-gray-400 transition-colors duration-500">Starting from</span>
+                    <div className="text-right">
+                      <p className="text-5xl font-bold text-primary">₹{packageData.price.toLocaleString()}</p>
+                      <p className="text-sm text-gray-500 dark:text-gray-400 transition-colors duration-500">per person</p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -628,9 +632,9 @@ export default function PackageDetail() {
                   href={packageData.whatsappLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full flex items-center justify-center gap-3 bg-green-500 hover:bg-green-600 text-white font-semibold py-4 px-6 rounded-xl shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl text-lg mb-6"
+                  className="w-full flex items-center justify-center gap-3 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-6 px-8 rounded-xl shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl text-lg mb-8 group"
                 >
-                  <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                  <svg className="h-7 w-7 transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
                   </svg>
                   Book on WhatsApp
@@ -645,16 +649,17 @@ export default function PackageDetail() {
                 ].map((item, i) => (
                   <div
                     key={i}
-                    className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-900/50 rounded-xl border border-gray-100 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors"
+                    className="flex items-center gap-4 p-5 bg-white/50 dark:bg-gray-900/50 rounded-xl border border-gray-100/50 dark:border-gray-700/50 hover:bg-white/80 dark:hover:bg-gray-900/80 transition-all duration-300 group transform hover:scale-[1.02]"
                   >
-                    <Check className="h-5 w-5 text-green-500" />
-                    <span className="text-gray-700 dark:text-gray-300">{item}</span>
+                    <div className="bg-primary/10 p-3 rounded-lg group-hover:scale-110 group-hover:rotate-12 transition-all duration-500">
+                      <Check className="h-5 w-5 text-primary" />
+                    </div>
+                    <span className="text-gray-700 dark:text-gray-300 font-medium transition-colors duration-500">{item}</span>
                   </div>
                 ))}
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </div>
