@@ -20,7 +20,7 @@ export default function AboutPage() {
           <div>
             <h2 className="text-2xl font-bold mb-4">Our Story</h2>
             <p className="text-gray-700 dark:text-gray-300 mb-4">
-              Founded in 2020, TravelEase was born from a passion for travel and a desire to make quality travel experiences accessible to everyone. What started as a small team of travel enthusiasts has grown into a trusted travel company serving thousands of customers across India.
+              Founded in 2024, Flyobo was born from a passion for travel and a desire to make quality travel experiences accessible to everyone. What started as a small team of travel enthusiasts has grown into a trusted travel company serving thousands of customers across India.
             </p>
             <p className="text-gray-700 dark:text-gray-300 mb-4">
               Our founders, avid travelers themselves, noticed a gap in the market for transparent, hassle-free travel packages that delivered on their promises. They set out to create a company that would prioritize customer satisfaction, authentic experiences, and value for money.
@@ -96,28 +96,10 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
               {
-                name: "Rahul Gupta",
+                name: "Digvijay Naidu Atla",
                 position: "Founder & CEO",
-                image: "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg",
-                bio: "Travel enthusiast with 15+ years in the tourism industry. Rahul has visited 45 countries and is passionate about sustainable travel."
-              },
-              {
-                name: "Priya Sharma",
-                position: "Head of Operations",
-                image: "https://images.pexels.com/photos/1181686/pexels-photo-1181686.jpeg",
-                bio: "With a background in hospitality management, Priya ensures all our packages exceed customer expectations."
-              },
-              {
-                name: "Vikram Patel",
-                position: "Lead Travel Consultant",
-                image: "https://images.pexels.com/photos/1516680/pexels-photo-1516680.jpeg",
-                bio: "Specializing in adventure travel, Vikram has explored every corner of India to find the best experiences for our clients."
-              },
-              {
-                name: "Ananya Singh",
-                position: "Customer Experience Manager",
-                image: "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg",
-                bio: "Dedicated to creating seamless travel experiences, Ananya works tirelessly to ensure customer satisfaction."
+                image: "C:\Users\hp\Downloads\IMG_20240411_005417_708.jpg",
+                bio: "Travel enthusiast with 15+ years in the tourism industry. Digvijay is passionate about sustainable travel."
               }
             ].map((member, index) => (
               <div key={index} className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
@@ -240,8 +222,7 @@ export default function AboutPage() {
         <div className="bg-primary text-white rounded-lg shadow-lg p-8 text-center">
           <h2 className="text-2xl font-bold mb-4">Ready to Start Your Journey?</h2>
           <p className="mb-6 max-w-2xl mx-auto">
-            Explore our curated travel packages and embark on the adventure of a lifetime. 
-            Our team is ready to help you plan your perfect getaway.
+            Today, Flyobo offers a wide range of carefully curated travel packages to destinations across India and internationally, with plans to expand to more places in the near future. Despite our growth, we remain committed to our core values of integrity, excellence, and customer-centricity.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Button asChild variant="secondary" size="lg">
