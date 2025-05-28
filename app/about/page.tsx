@@ -26,7 +26,7 @@ export default function AboutPage() {
               Our founders, avid travelers themselves, noticed a gap in the market for transparent, hassle-free travel packages that delivered on their promises. They set out to create a company that would prioritize customer satisfaction, authentic experiences, and value for money.
             </p>
             <p className="text-gray-700 dark:text-gray-300">
-              Today, TravelEase offers a wide range of carefully curated travel packages to destinations across India, with plans to expand internationally in the near future. Despite our growth, we remain committed to our core values of integrity, excellence, and customer-centricity.
+              Today, Flyobo offers a wide range of carefully curated travel packages to destinations across India, with plans to expand internationally in the near future. Despite our growth, we remain committed to our core values of integrity, excellence, and customer-centricity.
             </p>
           </div>
           <div className="relative h-80 lg:h-[450px] rounded-lg overflow-hidden shadow-lg">
