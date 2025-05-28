@@ -4,49 +4,51 @@ import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { 
-  Tabs, 
-  TabsContent, 
-  TabsList, 
-  TabsTrigger 
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger
 } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
-import { 
-  MapPin, 
-  Clock, 
-  Star, 
-  Calendar, 
-  Users, 
-  Check, 
-  X, 
-  ChevronLeft, 
-  Share2, 
-  MessageCircle 
+import {
+  MapPin,
+  Clock,
+  Star,
+  Calendar,
+  Users,
+  Check,
+  X,
+  ChevronLeft,
+  Share2,
+  MessageCircle,
+  Heart,
+  ArrowRight
 } from 'lucide-react';
 import { travelPackages, TravelPackage } from '@/lib/data';
-import BookingForm from '@/components/packages/booking-form';
 
 export default function PackageDetail() {
   const params = useParams();
   const router = useRouter();
   const [packageData, setPackageData] = useState<TravelPackage | null>(null);
   const [loading, setLoading] = useState(true);
-  const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [activeImageIndex, setActiveImageIndex] = useState<number | null>(null);
   const [showShareOptions, setShowShareOptions] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const imagesPerPage = 6;
 
   useEffect(() => {
     if (params.slug) {
-      // In a real app, this would be an API call
       const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
       const packageDetails = travelPackages.find(pkg => pkg.slug === slug);
-      
+
       if (packageDetails) {
         setPackageData(packageDetails);
       } else {
-        // Package not found, redirect to packages page
         router.push('/packages');
       }
-      
+
       setLoading(false);
     }
   }, [params.slug, router]);
@@ -54,7 +56,7 @@ export default function PackageDetail() {
   const handleShare = (platform: string) => {
     const url = window.location.href;
     const title = packageData?.name || 'Travel Package';
-    
+
     switch (platform) {
       case 'whatsapp':
         window.open(`https://wa.me/?text=${encodeURIComponent(`Check out this amazing travel package: ${title} ${url}`)}`);
@@ -72,25 +74,29 @@ export default function PackageDetail() {
         navigator.clipboard.writeText(url);
         alert('Link copied to clipboard!');
     }
-    
+
     setShowShareOptions(false);
   };
 
+  const totalPages = packageData ? Math.ceil(packageData.gallery.length / imagesPerPage) : 0;
+  const startIndex = (currentPage - 1) * imagesPerPage;
+  const endIndex = startIndex + imagesPerPage;
+  const currentImages = packageData?.gallery.slice(startIndex, endIndex) || [];
+
   if (loading) {
     return (
-      <div className="container mx-auto px-4 py-12 flex justify-center">
-        <div className="animate-pulse space-y-8 w-full max-w-4xl">
-          <div className="h-64 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
-          <div className="space-y-4">
-            <div className="h-10 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
-            <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
-            <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-1/4"></div>
-          </div>
-          <div className="space-y-2">
-            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded"></div>
-            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded"></div>
-            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded"></div>
-            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-5/6"></div>
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+        <div className="container mx-auto px-4 py-12">
+          <div className="animate-pulse space-y-8">
+            <div className="h-[60vh] bg-gray-200 dark:bg-gray-700 rounded-2xl"></div>
+            <div className="max-w-4xl mx-auto space-y-6">
+              <div className="h-12 bg-gray-200 dark:bg-gray-700 rounded-lg w-3/4"></div>
+              <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded-lg w-1/2"></div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="h-40 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+                <div className="h-40 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -99,457 +105,556 @@ export default function PackageDetail() {
 
   if (!packageData) {
     return (
-      <div className="container mx-auto px-4 py-12 text-center">
-        <h1 className="text-2xl font-bold mb-4">Package Not Found</h1>
-        <p className="mb-8">The package you're looking for doesn't exist or has been removed.</p>
-        <Button asChild>
-          <Link href="/packages">
-            <ChevronLeft className="mr-2 h-4 w-4" />
-            Back to Packages
-          </Link>
-        </Button>
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="text-center px-4">
+          <h1 className="text-3xl font-bold mb-4">Package Not Found</h1>
+          <p className="text-gray-600 dark:text-gray-400 mb-8">The package you're looking for doesn't exist or has been removed.</p>
+          <Button asChild size="lg">
+            <Link href="/packages" className="gap-2">
+              <ChevronLeft className="h-5 w-5" />
+              Back to Packages
+            </Link>
+          </Button>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="bg-gray-50 dark:bg-gray-900 min-h-screen pb-12">
-      {/* Gallery Section */}
-      <div className="relative h-[50vh] md:h-[60vh] overflow-hidden">
-        <img 
-          src={packageData.gallery[activeImageIndex]} 
-          alt={packageData.name}
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-        
-        {/* Navigation Arrows */}
-        <button 
-          className="absolute top-1/2 left-4 -translate-y-1/2 bg-white/20 hover:bg-white/40 rounded-full p-2 backdrop-blur-sm transition-colors"
-          onClick={() => setActiveImageIndex((prev) => (prev === 0 ? packageData.gallery.length - 1 : prev - 1))}
-        >
-          <ChevronLeft className="h-6 w-6 text-white" />
-        </button>
-        <button 
-          className="absolute top-1/2 right-4 -translate-y-1/2 bg-white/20 hover:bg-white/40 rounded-full p-2 backdrop-blur-sm transition-colors transform rotate-180"
-          onClick={() => setActiveImageIndex((prev) => (prev === packageData.gallery.length - 1 ? 0 : prev + 1))}
-        >
-          <ChevronLeft className="h-6 w-6 text-white" />
-        </button>
-        
-        {/* Thumbnails */}
-        <div className="absolute bottom-4 left-0 right-0 flex justify-center space-x-2">
-          {packageData.gallery.map((image, index) => (
-            <button
-              key={index}
-              className={`w-16 h-10 rounded overflow-hidden border-2 transition-all ${
-                index === activeImageIndex ? 'border-white' : 'border-transparent opacity-70 hover:opacity-100'
-              }`}
-              onClick={() => setActiveImageIndex(index)}
-            >
-              <img src={image} alt={`Thumbnail ${index + 1}`} className="w-full h-full object-cover" />
-            </button>
-          ))}
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      {/* Hero Section with Gallery */}
+      <div className="relative h-[70vh] overflow-hidden">
+        <div className="absolute inset-0">
+          <img
+            src={packageData.image}
+            alt={packageData.name}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
         </div>
-        
-        {/* Back button */}
-        <Link 
-          href="/packages" 
-          className="absolute top-4 left-4 flex items-center gap-1 text-white bg-black/30 hover:bg-black/50 backdrop-blur-sm rounded-full px-4 py-2 text-sm transition-colors"
-        >
-          <ChevronLeft className="h-4 w-4" />
-          Back
-        </Link>
-        
-        {/* Share button */}
-        <div className="absolute top-4 right-4">
-          <button 
-            className="flex items-center gap-1 text-white bg-black/30 hover:bg-black/50 backdrop-blur-sm rounded-full px-4 py-2 text-sm transition-colors"
-            onClick={() => setShowShareOptions(!showShareOptions)}
+
+        {/* Top Bar */}
+        <div className="absolute top-0 left-0 right-0 p-4 md:p-8 flex justify-between items-center">
+          <Link
+            href="/packages"
+            className="flex items-center gap-2 text-white bg-black/30 hover:bg-black/50 backdrop-blur-sm rounded-full px-4 py-2 text-sm transition-all hover:scale-105"
           >
-            <Share2 className="h-4 w-4" />
-            Share
-          </button>
-          
-          {showShareOptions && (
-            <div className="absolute top-full right-0 mt-2 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-2 w-48">
-              <div className="grid grid-cols-2 gap-2">
-                <button 
-                  className="flex items-center gap-2 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-sm"
-                  onClick={() => handleShare('whatsapp')}
-                >
-                  <span className="bg-green-500 text-white p-1 rounded">
-                    <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-                      <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm6.249 17.467c-.217.617-.5 1.186-.916 1.682-1.14 1.364-2.96 2.21-4.917 2.306-1.31.06-2.61-.325-3.785-.899-1.156-.616-2.216-1.428-3.14-2.352-1.124-1.124-2.094-2.317-2.876-3.646-1.086-1.892-1.468-4.074-1.02-6.204.65-2.707 2.432-5.15 4.9-6.346 3.094-1.535 6.72-1.14 9.324 1.001.87.71 1.692 1.49 2.271 2.426.579.936.873 2.002.873 3.074 0 3.298-1.482 6.433-3.714 8.958z"/>
-                    </svg>
-                  </span>
-                  WhatsApp
-                </button>
-                <button 
-                  className="flex items-center gap-2 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-sm"
-                  onClick={() => handleShare('facebook')}
-                >
-                  <span className="bg-blue-600 text-white p-1 rounded">
-                    <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M9.198 21.5h4v-8.01h3.604l.396-3.98h-4V7.5a1 1 0 0 1 1-1h3v-4h-3a5 5 0 0 0-5 5v2.01h-2l-.396 3.98h2.396v8.01Z" />
-                    </svg>
-                  </span>
-                  Facebook
-                </button>
-                <button 
-                  className="flex items-center gap-2 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-sm"
-                  onClick={() => handleShare('twitter')}
-                >
-                  <span className="bg-blue-400 text-white p-1 rounded">
-                    <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M19.633 7.997c.013.175.013.349.013.523 0 5.325-4.053 11.461-11.46 11.461-2.282 0-4.402-.661-6.186-1.809.324.037.636.05.973.05a8.07 8.07 0 0 0 5.001-1.721 4.036 4.036 0 0 1-3.767-2.793c.249.037.499.062.761.062.361 0 .724-.05 1.061-.137a4.027 4.027 0 0 1-3.23-3.953v-.05c.537.299 1.16.486 1.82.511a4.022 4.022 0 0 1-1.796-3.354c0-.748.199-1.434.548-2.032a11.457 11.457 0 0 0 8.306 4.215c-.062-.3-.1-.611-.1-.923a4.026 4.026 0 0 1 4.028-4.028c1.16 0 2.207.486 2.943 1.272a7.957 7.957 0 0 0 2.556-.973 4.02 4.02 0 0 1-1.771 2.22 8.073 8.073 0 0 0 2.319-.624 8.645 8.645 0 0 1-2.019 2.083z" />
-                    </svg>
-                  </span>
-                  Twitter
-                </button>
-                <button 
-                  className="flex items-center gap-2 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-sm"
-                  onClick={() => handleShare('email')}
-                >
-                  <span className="bg-gray-500 text-white p-1 rounded">
-                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                  </span>
-                  Email
-                </button>
-              </div>
-              <Separator className="my-2" />
-              <button 
-                className="flex items-center gap-2 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded w-full text-sm"
-                onClick={() => handleShare('copy')}
+            <ChevronLeft className="h-4 w-4" />
+            Back to Packages
+          </Link>
+
+          <div className="flex items-center gap-3">
+            <button
+              className="text-white bg-black/30 hover:bg-black/50 backdrop-blur-sm rounded-full p-2 transition-all hover:scale-105"
+              onClick={() => setIsFavorite(!isFavorite)}
+            >
+              <Heart className={`h-5 w-5 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
+            </button>
+            <div className="relative">
+              <button
+                className="flex items-center gap-2 text-white bg-black/30 hover:bg-black/50 backdrop-blur-sm rounded-full px-4 py-2 text-sm transition-all hover:scale-105"
+                onClick={() => setShowShareOptions(!showShareOptions)}
               >
-                <span className="bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 p-1 rounded">
-                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                  </svg>
-                </span>
-                Copy Link
+                <Share2 className="h-4 w-4" />
+                Share
               </button>
+
+              {showShareOptions && (
+                <div className="absolute top-full right-0 mt-2 bg-white dark:bg-gray-800 rounded-xl shadow-xl p-3 w-48">
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      className="flex items-center gap-2 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg text-sm transition-colors"
+                      onClick={() => handleShare('whatsapp')}
+                    >
+                      <span className="bg-green-500 text-white p-1.5 rounded-lg">
+                        <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+                        </svg>
+                      </span>
+                      WhatsApp
+                    </button>
+                    <button
+                      className="flex items-center gap-2 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg text-sm transition-colors"
+                      onClick={() => handleShare('facebook')}
+                    >
+                      <span className="bg-blue-600 text-white p-1.5 rounded-lg">
+                        <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M9.198 21.5h4v-8.01h3.604l.396-3.98h-4V7.5a1 1 0 0 1 1-1h3v-4h-3a5 5 0 0 0-5 5v2.01h-2l-.396 3.98h2.396v8.01Z" />
+                        </svg>
+                      </span>
+                      Facebook
+                    </button>
+                    <button
+                      className="flex items-center gap-2 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg text-sm transition-colors"
+                      onClick={() => handleShare('twitter')}
+                    >
+                      <span className="bg-blue-400 text-white p-1.5 rounded-lg">
+                        <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M19.633 7.997c.013.175.013.349.013.523 0 5.325-4.053 11.461-11.46 11.461-2.282 0-4.402-.661-6.186-1.809.324.037.636.05.973.05a8.07 8.07 0 0 0 5.001-1.721 4.036 4.036 0 0 1-3.767-2.793c.249.037.499.062.761.062.361 0 .724-.05 1.061-.137a4.027 4.027 0 0 1-3.23-3.953v-.05c.537.299 1.16.486 1.82.511a4.022 4.022 0 0 1-1.796-3.354c0-.748.199-1.434.548-2.032a11.457 11.457 0 0 0 8.306 4.215c-.062-.3-.1-.611-.1-.923a4.026 4.026 0 0 1 4.028-4.028c1.16 0 2.207.486 2.943 1.272a7.957 7.957 0 0 0 2.556-.973 4.02 4.02 0 0 1-1.771 2.22 8.073 8.073 0 0 0 2.319-.624 8.645 8.645 0 0 1-2.019 2.083z" />
+                        </svg>
+                      </span>
+                      Twitter
+                    </button>
+                    <button
+                      className="flex items-center gap-2 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg text-sm transition-colors"
+                      onClick={() => handleShare('email')}
+                    >
+                      <span className="bg-gray-500 text-white p-1.5 rounded-lg">
+                        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                      </span>
+                      Email
+                    </button>
+                  </div>
+                  <Separator className="my-2" />
+                  <button
+                    className="flex items-center gap-2 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg w-full text-sm transition-colors"
+                    onClick={() => handleShare('copy')}
+                  >
+                    <span className="bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 p-1.5 rounded-lg">
+                      <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                      </svg>
+                    </span>
+                    Copy Link
+                  </button>
+                </div>
+              )}
             </div>
-          )}
+          </div>
         </div>
-        
-        {/* Package title */}
-        <div className="absolute bottom-16 md:bottom-20 left-0 right-0 px-4 md:px-8">
+
+        {/* Package Info */}
+        <div className="absolute bottom-0 left-0 right-0 p-8">
           <div className="max-w-6xl mx-auto">
-            <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
-              {packageData.name}
-            </h1>
-            <div className="flex flex-wrap items-center gap-4 text-white">
-              <div className="flex items-center">
-                <MapPin className="h-4 w-4 mr-1" />
+            <div className="flex flex-wrap items-center gap-4 text-white/80 mb-4">
+              <div className="flex items-center gap-2">
+                <MapPin className="h-5 w-5" />
                 <span>{packageData.location}</span>
               </div>
-              <div className="flex items-center">
-                <Clock className="h-4 w-4 mr-1" />
+              <div className="flex items-center gap-2">
+                <Clock className="h-5 w-5" />
                 <span>{packageData.duration}</span>
               </div>
-              <div className="flex items-center">
-                <Star className="h-4 w-4 text-yellow-400 mr-1" />
+              <div className="flex items-center gap-2">
+                <Star className="h-5 w-5 text-yellow-400" />
                 <span>{packageData.rating} ({packageData.reviewCount} reviews)</span>
               </div>
             </div>
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+              {packageData.name}
+            </h1>
+            <p className="text-xl text-white/90 max-w-3xl">
+              {packageData.description}
+            </p>
           </div>
         </div>
       </div>
-      
+
       {/* Main Content */}
-      <div className="container mx-auto px-4 -mt-8 relative z-10">
+      <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Package Details */}
-          <div className="lg:col-span-2">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-8">
-              <Tabs defaultValue="overview">
-                <TabsList className="mb-6">
-                  <TabsTrigger value="overview">Overview</TabsTrigger>
-                  <TabsTrigger value="inclusions">Inclusions & Exclusions</TabsTrigger>
-                  <TabsTrigger value="itinerary">Itinerary</TabsTrigger>
-                  <TabsTrigger value="policies">Policies</TabsTrigger>
-                </TabsList>
-                
-                <TabsContent value="overview">
-                  <h2 className="text-2xl font-bold mb-4">Package Overview</h2>
-                  <p className="text-gray-700 dark:text-gray-300 mb-6">
-                    {packageData.longDescription}
-                  </p>
-                  
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-                    <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg">
-                      <h3 className="font-semibold mb-2">Location</h3>
-                      <div className="flex items-center text-gray-700 dark:text-gray-300">
-                        <MapPin className="h-4 w-4 mr-2 text-primary" />
-                        <span>{packageData.location}</span>
+          <div className="lg:col-span-2 space-y-8">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden">
+              <Tabs defaultValue="overview" className="w-full">
+                <div className="border-b border-gray-200 dark:border-gray-700">
+                  <TabsList className="w-full justify-start p-0 bg-transparent">
+                    <TabsTrigger value="overview" className="px-6 py-4 data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-none border-b-2 border-transparent data-[state=active]:border-primary">
+                      Overview
+                    </TabsTrigger>
+                    <TabsTrigger value="gallery" className="px-6 py-4 data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-none border-b-2 border-transparent data-[state=active]:border-primary">
+                      Gallery
+                    </TabsTrigger>
+                    <TabsTrigger value="inclusions" className="px-6 py-4 data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-none border-b-2 border-transparent data-[state=active]:border-primary">
+                      Inclusions & Exclusions
+                    </TabsTrigger>
+                    <TabsTrigger value="itinerary" className="px-6 py-4 data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-none border-b-2 border-transparent data-[state=active]:border-primary">
+                      Itinerary
+                    </TabsTrigger>
+                    <TabsTrigger value="policies" className="px-6 py-4 data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-none border-b-2 border-transparent data-[state=active]:border-primary">
+                      Policies
+                    </TabsTrigger>
+                  </TabsList>
+                </div>
+
+                <div className="p-6">
+                  <TabsContent value="overview" className="space-y-6">
+                    <div className="prose dark:prose-invert max-w-none">
+                      <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed">
+                        {packageData.longDescription}
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                      <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-xl">
+                        <h3 className="text-lg font-semibold mb-4">Location</h3>
+                        <div className="flex items-center text-gray-700 dark:text-gray-300">
+                          <MapPin className="h-5 w-5 text-primary mr-3" />
+                          <span className="text-lg">{packageData.location}</span>
+                        </div>
+                      </div>
+                      <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-xl">
+                        <h3 className="text-lg font-semibold mb-4">Duration</h3>
+                        <div className="flex items-center text-gray-700 dark:text-gray-300">
+                          <Clock className="h-5 w-5 text-primary mr-3" />
+                          <span className="text-lg">{packageData.duration}</span>
+                        </div>
                       </div>
                     </div>
-                    <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg">
-                      <h3 className="font-semibold mb-2">Duration</h3>
-                      <div className="flex items-center text-gray-700 dark:text-gray-300">
-                        <Clock className="h-4 w-4 mr-2 text-primary" />
-                        <span>{packageData.duration}</span>
+                  </TabsContent>
+
+                  <TabsContent value="gallery" className="space-y-8">
+                    {/* Gallery Header with Enhanced Design */}
+                    <div className="text-center mb-16 relative">
+                      <div className="absolute left-1/2 -translate-x-1/2 -top-8 w-32 h-1 bg-gradient-to-r from-transparent via-primary/40 to-transparent rounded-full"></div>
+                      <h3 className="text-4xl font-bold text-gray-900 dark:text-white mb-6 bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300">
+                        Photo Gallery
+                      </h3>
+                      <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto text-lg leading-relaxed">
+                        Explore the beauty of {packageData.name} through our curated collection of stunning photographs
+                      </p>
+                    </div>
+
+                    {/* Enhanced Pinterest-style Masonry Grid */}
+                    <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
+                      {currentImages.map((image, index) => (
+                        <div
+                          key={index}
+                          className="break-inside-avoid relative group cursor-pointer"
+                          onClick={() => setActiveImageIndex(startIndex + index)}
+                        >
+                          <div className="relative overflow-hidden rounded-3xl transform transition-all duration-700 hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/20">
+                            <img
+                              src={image}
+                              alt={`${packageData.name} - Image ${startIndex + index + 1}`}
+                              className="w-full h-auto object-cover transition-transform duration-1000 group-hover:scale-110"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-700">
+                              <div className="absolute bottom-0 left-0 right-0 p-8 transform translate-y-6 group-hover:translate-y-0 transition-transform duration-700">
+                                <div className="flex items-center justify-between">
+                                  <div className="space-y-2">
+                                    <span className="text-white text-xl font-semibold block tracking-wide">
+                                      {packageData.name}
+                                    </span>
+                                    <span className="text-white/80 text-sm font-medium tracking-wide">
+                                      Photo {startIndex + index + 1}
+                                    </span>
+                                  </div>
+                                  <div className="bg-white/90 dark:bg-gray-800/90 p-4 rounded-full transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-12 shadow-lg">
+                                    <svg className="w-6 h-6 text-gray-900 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m4-3H6" />
+                                    </svg>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Pagination Controls */}
+                    {totalPages > 1 && (
+                      <div className="flex items-center justify-center gap-2 mt-12">
+                        <button
+                          onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                          disabled={currentPage === 1}
+                          className="p-3 rounded-full bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          <svg className="w-6 h-6 text-gray-700 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+                          </svg>
+                        </button>
+                        
+                        <div className="flex items-center gap-2">
+                          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                            <button
+                              key={page}
+                              onClick={() => setCurrentPage(page)}
+                              className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium transition-all duration-300 ${
+                                currentPage === page
+                                  ? 'bg-primary text-white shadow-lg'
+                                  : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                              }`}
+                            >
+                              {page}
+                            </button>
+                          ))}
+                        </div>
+
+                        <button
+                          onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                          disabled={currentPage === totalPages}
+                          className="p-3 rounded-full bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          <svg className="w-6 h-6 text-gray-700 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                          </svg>
+                        </button>
+                      </div>
+                    )}
+
+                    {/* Enhanced Image Preview Modal */}
+                    {activeImageIndex !== null && (
+                      <div 
+                        className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4 backdrop-blur-xl"
+                        onClick={() => setActiveImageIndex(null)}
+                      >
+                        <div className="relative w-full max-w-6xl max-h-[90vh]">
+                          <img
+                            src={packageData.gallery[activeImageIndex]}
+                            alt={`${packageData.name} - Image ${activeImageIndex + 1}`}
+                            className="w-full h-full object-contain rounded-2xl shadow-2xl shadow-primary/20"
+                          />
+                          
+                          {/* Enhanced Close Button */}
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setActiveImageIndex(null);
+                            }}
+                            className="absolute top-8 right-8 text-white bg-black/50 hover:bg-black/70 rounded-full p-4 transition-all duration-500 hover:scale-110 hover:rotate-90 shadow-lg"
+                          >
+                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                          </button>
+
+                          {/* Enhanced Navigation Buttons */}
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setActiveImageIndex(prev => {
+                                if (prev === null) return 0;
+                                return prev === 0 ? packageData.gallery.length - 1 : prev - 1;
+                              });
+                            }}
+                            className="absolute left-8 top-1/2 -translate-y-1/2 text-white bg-black/50 hover:bg-black/70 rounded-full p-5 transition-all duration-500 hover:scale-110 hover:-translate-x-2 shadow-lg"
+                          >
+                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+                            </svg>
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setActiveImageIndex(prev => {
+                                if (prev === null) return 0;
+                                return prev === packageData.gallery.length - 1 ? 0 : prev + 1;
+                              });
+                            }}
+                            className="absolute right-8 top-1/2 -translate-y-1/2 text-white bg-black/50 hover:bg-black/70 rounded-full p-5 transition-all duration-500 hover:scale-110 hover:translate-x-2 shadow-lg"
+                          >
+                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                          </button>
+
+                          {/* Enhanced Image Counter */}
+                          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 bg-black/50 backdrop-blur-xl text-white px-8 py-4 rounded-full text-sm font-medium tracking-wide shadow-lg">
+                            {activeImageIndex + 1} / {packageData.gallery.length}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </TabsContent>
+
+                  <TabsContent value="inclusions" className="space-y-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-gray-700">
+                        <h3 className="text-2xl font-semibold mb-6 flex items-center text-green-600 dark:text-green-500">
+                          <Check className="h-6 w-6 mr-3" />
+                          Inclusions
+                        </h3>
+                        <div className="space-y-4">
+                          {packageData.inclusions.map((inclusion, index) => (
+                            <div key={index} className="flex items-start gap-3 bg-gray-50 dark:bg-gray-900/50 p-4 rounded-xl border border-gray-100 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors">
+                              <Check className="h-5 w-5 text-green-500 shrink-0 mt-0.5" />
+                              <span className="text-gray-700 dark:text-gray-300">{inclusion}</span>
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  
-                  <h3 className="text-xl font-semibold mb-3">Package Highlights</h3>
-                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-6">
-                    {packageData.inclusions.map((inclusion, index) => (
-                      <li key={index} className="flex items-start">
-                        <Check className="h-5 w-5 text-green-500 mr-2 shrink-0" />
-                        <span>{inclusion}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </TabsContent>
-                
-                <TabsContent value="inclusions">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div>
-                      <h2 className="text-xl font-bold mb-4 flex items-center text-green-600 dark:text-green-500">
-                        <Check className="h-5 w-5 mr-2" />
-                        Inclusions
-                      </h2>
-                      <ul className="space-y-2">
-                        {packageData.inclusions.map((inclusion, index) => (
-                          <li key={index} className="flex items-start">
-                            <Check className="h-5 w-5 text-green-500 mr-2 shrink-0" />
-                            <span>{inclusion}</span>
+
+                    {/* Contact Agent Message */}
+                    <div className="mt-8 bg-gradient-to-r from-primary/5 to-primary/10 dark:from-primary/10 dark:to-primary/20 p-8 rounded-2xl border border-primary/10 dark:border-primary/20 shadow-lg">
+                      <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+                        <div className="text-center md:text-left">
+                          <h4 className="text-xl font-semibold mb-3 text-gray-900 dark:text-white">Need More Details?</h4>
+                          <p className="text-gray-600 dark:text-gray-400 max-w-md">
+                            Contact our travel agent on WhatsApp for complete inclusions and exclusions list. Get personalized assistance and answers to all your questions.
+                          </p>
+                        </div>
+                        {packageData.whatsappLink && (
+                          <a
+                            href={packageData.whatsappLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-3 bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-xl shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl min-w-[200px] justify-center"
+                          >
+                            <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                            </svg>
+                            <span className="font-semibold text-lg">Contact Agent</span>
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  </TabsContent>
+
+                  <TabsContent value="itinerary" className="space-y-8">
+                    <div className="mt-8 bg-gradient-to-r from-primary/5 to-primary/10 dark:from-primary/10 dark:to-primary/20 p-8 rounded-2xl border border-primary/10 dark:border-primary/20 shadow-lg">
+                      <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+                        <div className="text-center md:text-left">
+                          <h4 className="text-xl font-semibold mb-3 text-gray-900 dark:text-white">Detailed Itinerary Available</h4>
+                          <p className="text-gray-600 dark:text-gray-400 max-w-md">
+                            Get a complete day-by-day itinerary for this package. Our travel agent will provide you with detailed information about activities, timings, and more.
+                          </p>
+                        </div>
+                        {packageData.whatsappLink && (
+                          <a
+                            href={packageData.whatsappLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-3 bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-xl shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl min-w-[200px] justify-center"
+                          >
+                            <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                            </svg>
+                            <span className="font-semibold text-lg">Get Itinerary</span>
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  </TabsContent>
+
+                  <TabsContent value="policies" className="space-y-8">
+                    <h3 className="text-2xl font-semibold mb-6">Booking & Cancellation Policies</h3>
+
+                    <div className="space-y-6">
+                      <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-xl">
+                        <h4 className="text-xl font-semibold mb-4">Payment Policy</h4>
+                        <ul className="space-y-3">
+                          <li className="flex items-start gap-3">
+                            <div className="h-6 w-6 rounded-full bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
+                              <span className="text-primary font-semibold">1</span>
+                            </div>
+                            <span className="text-gray-700 dark:text-gray-300">50% payment at the time of booking</span>
                           </li>
-                        ))}
-                        <li className="flex items-start">
-                          <Check className="h-5 w-5 text-green-500 mr-2 shrink-0" />
-                          <span>All applicable taxes</span>
-                        </li>
-                        <li className="flex items-start">
-                          <Check className="h-5 w-5 text-green-500 mr-2 shrink-0" />
-                          <span>24/7 on-trip assistance</span>
-                        </li>
-                      </ul>
+                          <li className="flex items-start gap-3">
+                            <div className="h-6 w-6 rounded-full bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
+                              <span className="text-primary font-semibold">2</span>
+                            </div>
+                            <span className="text-gray-700 dark:text-gray-300">Remaining 50% payment 14 days before the trip</span>
+                          </li>
+                          <li className="flex items-start gap-3">
+                            <div className="h-6 w-6 rounded-full bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
+                              <span className="text-primary font-semibold">3</span>
+                            </div>
+                            <span className="text-gray-700 dark:text-gray-300">For bookings made within 14 days of the trip, 100% payment is required</span>
+                          </li>
+                        </ul>
+                      </div>
+
+                      <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-xl">
+                        <h4 className="text-xl font-semibold mb-4">Cancellation Policy</h4>
+                        <ul className="space-y-3">
+                          <li className="flex items-start gap-3">
+                            <div className="h-6 w-6 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center shrink-0 mt-0.5">
+                              <span className="text-red-600 dark:text-red-400 font-semibold">1</span>
+                            </div>
+                            <span className="text-gray-700 dark:text-gray-300">30+ days before departure: 90% refund</span>
+                          </li>
+                          <li className="flex items-start gap-3">
+                            <div className="h-6 w-6 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center shrink-0 mt-0.5">
+                              <span className="text-red-600 dark:text-red-400 font-semibold">2</span>
+                            </div>
+                            <span className="text-gray-700 dark:text-gray-300">15-29 days before departure: 70% refund</span>
+                          </li>
+                          <li className="flex items-start gap-3">
+                            <div className="h-6 w-6 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center shrink-0 mt-0.5">
+                              <span className="text-red-600 dark:text-red-400 font-semibold">3</span>
+                            </div>
+                            <span className="text-gray-700 dark:text-gray-300">7-14 days before departure: 50% refund</span>
+                          </li>
+                          <li className="flex items-start gap-3">
+                            <div className="h-6 w-6 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center shrink-0 mt-0.5">
+                              <span className="text-red-600 dark:text-red-400 font-semibold">4</span>
+                            </div>
+                            <span className="text-gray-700 dark:text-gray-300">Less than 7 days before departure: No refund</span>
+                          </li>
+                        </ul>
+                      </div>
+
+                      <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-xl">
+                        <h4 className="text-xl font-semibold mb-4">Refund Processing</h4>
+                        <p className="text-gray-700 dark:text-gray-300">
+                          All refunds will be processed within 7-10 working days after the cancellation is confirmed. Refunds will be made to the original payment method used for booking.
+                        </p>
+                      </div>
+
+                      <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-xl">
+                        <h4 className="text-xl font-semibold mb-4">Booking Modifications</h4>
+                        <p className="text-gray-700 dark:text-gray-300">
+                          Changes to booking dates are subject to availability and may incur additional charges. Modifications must be requested at least 14 days before the trip.
+                        </p>
+                      </div>
                     </div>
-                    
-                    <div>
-                      <h2 className="text-xl font-bold mb-4 flex items-center text-red-600 dark:text-red-500">
-                        <X className="h-5 w-5 mr-2" />
-                        Exclusions
-                      </h2>
-                      <ul className="space-y-2">
-                        <li className="flex items-start">
-                          <X className="h-5 w-5 text-red-500 mr-2 shrink-0" />
-                          <span>Airfare (unless specified)</span>
-                        </li>
-                        <li className="flex items-start">
-                          <X className="h-5 w-5 text-red-500 mr-2 shrink-0" />
-                          <span>Personal expenses</span>
-                        </li>
-                        <li className="flex items-start">
-                          <X className="h-5 w-5 text-red-500 mr-2 shrink-0" />
-                          <span>Optional activities not mentioned in inclusions</span>
-                        </li>
-                        <li className="flex items-start">
-                          <X className="h-5 w-5 text-red-500 mr-2 shrink-0" />
-                          <span>Travel insurance</span>
-                        </li>
-                        <li className="flex items-start">
-                          <X className="h-5 w-5 text-red-500 mr-2 shrink-0" />
-                          <span>Additional meals not specified in inclusions</span>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </TabsContent>
-                
-                <TabsContent value="itinerary">
-                  <h2 className="text-2xl font-bold mb-6">Detailed Itinerary</h2>
-                  
-                  {/* Sample itinerary based on the package */}
-                  <div className="space-y-6">
-                    <div>
-                      <h3 className="text-lg font-semibold mb-2">Day 1: Arrival</h3>
-                      <p className="text-gray-700 dark:text-gray-300">
-                        Arrive at your destination and transfer to your hotel. Check-in and relax. In the evening, enjoy a welcome dinner and briefing about your upcoming tour.
-                      </p>
-                    </div>
-                    
-                    <div>
-                      <h3 className="text-lg font-semibold mb-2">Day 2: Sightseeing</h3>
-                      <p className="text-gray-700 dark:text-gray-300">
-                        After breakfast, embark on a full-day sightseeing tour of the main attractions. Lunch will be at a local restaurant to experience authentic cuisine. Return to the hotel in the evening for leisure time.
-                      </p>
-                    </div>
-                    
-                    <div>
-                      <h3 className="text-lg font-semibold mb-2">Day 3: Activities & Exploration</h3>
-                      <p className="text-gray-700 dark:text-gray-300">
-                        Enjoy breakfast at the hotel, followed by activities specific to your destination. For beach destinations, this could include water sports. For hill stations, this might include trekking or nature walks. For heritage destinations, this could be monument visits.
-                      </p>
-                    </div>
-                    
-                    <div>
-                      <h3 className="text-lg font-semibold mb-2">Day 4: Departure</h3>
-                      <p className="text-gray-700 dark:text-gray-300">
-                        After breakfast, check-out from the hotel. Depending on your departure time, you may have free time for last-minute shopping or sightseeing. Transfer to the airport/railway station for your onward journey.
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="mt-6 p-4 bg-gray-50 dark:bg-gray-900 rounded-lg">
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      <strong>Note:</strong> This is a sample itinerary and may vary based on weather conditions, local events, and other factors. A detailed itinerary will be provided after booking.
-                    </p>
-                  </div>
-                </TabsContent>
-                
-                <TabsContent value="policies">
-                  <h2 className="text-2xl font-bold mb-6">Booking & Cancellation Policies</h2>
-                  
-                  <div className="space-y-6">
-                    <div>
-                      <h3 className="text-lg font-semibold mb-2">Payment Policy</h3>
-                      <ul className="list-disc pl-5 space-y-1 text-gray-700 dark:text-gray-300">
-                        <li>50% payment at the time of booking</li>
-                        <li>Remaining 50% payment 14 days before the trip</li>
-                        <li>For bookings made within 14 days of the trip, 100% payment is required</li>
-                      </ul>
-                    </div>
-                    
-                    <div>
-                      <h3 className="text-lg font-semibold mb-2">Cancellation Policy</h3>
-                      <ul className="list-disc pl-5 space-y-1 text-gray-700 dark:text-gray-300">
-                        <li>30+ days before departure: 90% refund</li>
-                        <li>15-29 days before departure: 70% refund</li>
-                        <li>7-14 days before departure: 50% refund</li>
-                        <li>Less than 7 days before departure: No refund</li>
-                      </ul>
-                    </div>
-                    
-                    <div>
-                      <h3 className="text-lg font-semibold mb-2">Refund Processing</h3>
-                      <p className="text-gray-700 dark:text-gray-300">
-                        All refunds will be processed within 7-10 working days after the cancellation is confirmed. Refunds will be made to the original payment method used for booking.
-                      </p>
-                    </div>
-                    
-                    <div>
-                      <h3 className="text-lg font-semibold mb-2">Booking Modifications</h3>
-                      <p className="text-gray-700 dark:text-gray-300">
-                        Changes to booking dates are subject to availability and may incur additional charges. Modifications must be requested at least 14 days before the trip.
-                      </p>
-                    </div>
-                  </div>
-                </TabsContent>
+                  </TabsContent>
+                </div>
               </Tabs>
             </div>
-            
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold">Customer Reviews</h2>
-                <div className="flex items-center">
-                  <Star className="h-5 w-5 text-yellow-400 mr-1" />
-                  <span className="font-semibold">{packageData.rating}</span>
-                  <span className="text-gray-500 dark:text-gray-400 ml-1">({packageData.reviewCount} reviews)</span>
-                </div>
-              </div>
-              
-              {/* Sample reviews */}
-              <div className="space-y-6">
-                <div className="border-b border-gray-200 dark:border-gray-700 pb-6">
-                  <div className="flex justify-between mb-2">
-                    <div className="flex items-center">
-                      <div className="w-10 h-10 rounded-full bg-gray-300 dark:bg-gray-600 overflow-hidden mr-3">
-                        <img 
-                          src="https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg" 
-                          alt="Reviewer" 
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <div>
-                        <h4 className="font-semibold">Rahul Sharma</h4>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">Traveled in June 2023</p>
-                      </div>
-                    </div>
-                    <div className="flex">
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <Star 
-                          key={star} 
-                          className={`h-4 w-4 ${star <= 5 ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}`} 
-                        />
-                      ))}
-                    </div>
-                  </div>
-                  <p className="text-gray-700 dark:text-gray-300">
-                    Amazing experience! The package was well-organized, and everything was as promised. The hotel was clean and comfortable, and the sightseeing tours were informative and fun. Would definitely recommend this package to anyone visiting.
-                  </p>
-                </div>
-                
-                <div className="border-b border-gray-200 dark:border-gray-700 pb-6">
-                  <div className="flex justify-between mb-2">
-                    <div className="flex items-center">
-                      <div className="w-10 h-10 rounded-full bg-gray-300 dark:bg-gray-600 overflow-hidden mr-3">
-                        <img 
-                          src="https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg" 
-                          alt="Reviewer" 
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <div>
-                        <h4 className="font-semibold">Priya Patel</h4>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">Traveled in May 2023</p>
-                      </div>
-                    </div>
-                    <div className="flex">
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <Star 
-                          key={star} 
-                          className={`h-4 w-4 ${star <= 4 ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}`} 
-                        />
-                      ))}
-                    </div>
-                  </div>
-                  <p className="text-gray-700 dark:text-gray-300">
-                    Great package overall! The hotel was nice, and the sightseeing was good. Only suggestion would be to include more meals in the package. Had to spend extra on food. Otherwise, it was a wonderful experience.
-                  </p>
-                </div>
-              </div>
-              
-              <Button className="mt-6" variant="outline">
-                <MessageCircle className="mr-2 h-4 w-4" />
-                View All Reviews
-              </Button>
-            </div>
           </div>
-          
+
           {/* Booking Form */}
           <div className="lg:col-span-1">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 sticky top-24">
-              <div className="mb-6">
-                <div className="flex justify-between items-start mb-4">
-                  <h2 className="text-2xl font-bold">Book This Package</h2>
-                  <p className="text-2xl font-bold text-primary">₹{packageData.price.toLocaleString()}</p>
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 sticky top-24 border border-gray-200 dark:border-gray-700">
+              <div className="mb-8">
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Book This Package</h2>
+                <div className="flex items-baseline justify-between bg-gray-50 dark:bg-gray-900/50 p-4 rounded-xl border border-gray-100 dark:border-gray-700">
+                  <span className="text-sm text-gray-500 dark:text-gray-400">Starting from</span>
+                  <div className="text-right">
+                    <p className="text-3xl font-bold text-primary">₹{packageData.price.toLocaleString()}</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">per person</p>
+                  </div>
                 </div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">per person on twin sharing basis</p>
               </div>
+
               {packageData.whatsappLink && (
                 <a
                   href={packageData.whatsappLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-lg shadow transition-colors text-lg mb-2"
+                  className="w-full flex items-center justify-center gap-3 bg-green-500 hover:bg-green-600 text-white font-semibold py-4 px-6 rounded-xl shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl text-lg mb-6"
                 >
-                  <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-                    <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm6.249 17.467c-.217.617-.5 1.186-.916 1.682-1.14 1.364-2.96 2.21-4.917 2.306-1.31.06-2.61-.325-3.785-.899-1.156-.616-2.216-1.428-3.14-2.352-1.124-1.124-2.094-2.317-2.876-3.646-1.086-1.892-1.468-4.074-1.02-6.204.65-2.707 2.432-5.15 4.9-6.346 3.094-1.535 6.72-1.14 9.324 1.001.87.71 1.692 1.49 2.271 2.426.579.936.873 2.002.873 3.074 0 3.298-1.482 6.433-3.714 8.958z"/>
                   </svg>
                   Book on WhatsApp
                 </a>
               )}
+
+              <div className="space-y-4">
+                {[
+                  "Best Price Guarantee",
+                  "Instant Confirmation",
+                  "24/7 Customer Support"
+                ].map((item, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-900/50 rounded-xl border border-gray-100 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors"
+                  >
+                    <Check className="h-5 w-5 text-green-500" />
+                    <span className="text-gray-700 dark:text-gray-300">{item}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
+
         </div>
       </div>
     </div>
