@@ -62,14 +62,6 @@ export function FeaturedPackages() {
               
               <CardFooter className="flex justify-between items-center pt-0">
                 <div className="flex flex-wrap gap-1">
-                  {pkg.inclusions.slice(0, 2).map((inclusion, index) => (
-                    <span 
-                      key={index} 
-                      className="inline-block bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-xs px-2 py-1 rounded"
-                    >
-                      {inclusion}
-                    </span>
-                  ))}
                   {pkg.inclusions.length > 2 && (
                     <span className="inline-block bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-xs px-2 py-1 rounded">
                       +{pkg.inclusions.length - 2} more
