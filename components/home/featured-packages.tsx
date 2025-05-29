@@ -61,13 +61,6 @@ export function FeaturedPackages() {
               </CardContent>
               
               <CardFooter className="flex justify-between items-center pt-0">
-                <div className="flex flex-wrap gap-1">
-                  {pkg.inclusions.length > 2 && (
-                    <span className="inline-block bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-xs px-2 py-1 rounded">
-                      +{pkg.inclusions.length - 2} more
-                    </span>
-                  )}
-                </div>
                 <Button asChild variant="ghost" className="text-primary p-0">
                   <Link href={`/packages/${pkg.slug}`}>
                     View Details <ArrowRight className="ml-1 h-4 w-4" />
