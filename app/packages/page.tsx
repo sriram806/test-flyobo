@@ -115,51 +115,56 @@ export default function PackagesPage() {
     }
 
     // Apply price range filter
-    result = result.filter(pkg =>
-      pkg.price >= filters.priceRange[0] && pkg.price <= filters.priceRange[1]
-    );
+    result = result.filter(pkg => {
+      const price = typeof pkg.price === 'string' ? parseFloat(pkg.price.replace(/[^0-9.-]+/g, '')) : pkg.price;
+      return price >= filters.priceRange[0] && price <= filters.priceRange[1];
+    });
 
     // Apply duration filter
     if (filters.duration) {
       result = result.filter(pkg => {
         try {
-          // Handle different duration formats
           const durationStr = pkg.duration.toLowerCase();
           let days = 0;
 
-          // Try to extract days from different formats
           if (durationStr.includes('day')) {
-            // Format: "X Days" or "X Days/Nights"
             const match = durationStr.match(/(\d+)\s*days?/i);
             if (match) {
-              days = parseInt(match[1]);
+              days = parseInt(match[1], 10);
             }
           } else if (durationStr.includes('night')) {
-            // Format: "X Nights"
             const match = durationStr.match(/(\d+)\s*nights?/i);
             if (match) {
-              days = parseInt(match[1]) + 1; // Nights + 1 for days
+              days = parseInt(match[1], 10) + 1;
             }
           }
 
-          // Apply duration filter
-          if (filters.duration === '1-3') return days <= 3;
-          if (filters.duration === '4-6') return days >= 4 && days <= 6;
-          if (filters.duration === '7-10') return days >= 7 && days <= 10;
-          if (filters.duration === '10+') return days > 10;
+          const daysNum = Number(days);
+          if (filters.duration === '1-3') return daysNum <= 3;
+          if (filters.duration === '4-6') return daysNum >= 4 && daysNum <= 6;
+          if (filters.duration === '7-10') return daysNum >= 7 && daysNum <= 10;
+          if (filters.duration === '10+') return daysNum > 10;
           return true;
         } catch (error) {
           console.error('Error parsing duration:', error);
-          return true; // Include the package if duration parsing fails
+          return true;
         }
       });
     }
 
     // Apply sorting
     if (filters.sortBy === 'price-low') {
-      result.sort((a, b) => a.price - b.price);
+      result.sort((a, b) => {
+        const priceA = typeof a.price === 'string' ? parseFloat(a.price.replace(/[^0-9.-]+/g, '')) : a.price;
+        const priceB = typeof b.price === 'string' ? parseFloat(b.price.replace(/[^0-9.-]+/g, '')) : b.price;
+        return priceA - priceB;
+      });
     } else if (filters.sortBy === 'price-high') {
-      result.sort((a, b) => b.price - a.price);
+      result.sort((a, b) => {
+        const priceA = typeof a.price === 'string' ? parseFloat(a.price.replace(/[^0-9.-]+/g, '')) : a.price;
+        const priceB = typeof b.price === 'string' ? parseFloat(b.price.replace(/[^0-9.-]+/g, '')) : b.price;
+        return priceB - priceA;
+      });
     } else if (filters.sortBy === 'rating') {
       result.sort((a, b) => b.rating - a.rating);
     }
@@ -407,7 +412,7 @@ export default function PackagesPage() {
 
                       <CardHeader className="pb-2">
                         <div className="flex justify-between items-start">
-                          <h3 className="text-lg font-bold group-hover:text-primary transition-colors line-clamp-1">{pkg.name}</h3>
+                          <h3 className="text-lg font-bold group-hover:text-primary transition-colors line-clamp-1">{pkg.name.replace(/^"+|"+$/g, "")}</h3>
                           <p className="text-lg font-bold text-primary">₹{pkg.price.toLocaleString()}</p>
                         </div>
                       </CardHeader>
@@ -421,29 +426,40 @@ export default function PackagesPage() {
                           <Clock className="h-4 w-4 mr-2 text-primary" />
                           <span className="text-sm">{pkg.duration}</span>
                         </div>
-                        <p className="text-gray-700 dark:text-gray-300 line-clamp-2 text-sm">{pkg.description}</p>
+                        <p className="text-gray-700 dark:text-gray-300 line-clamp-2 text-sm">{pkg.description.replace(/^"+|"+$/g, "")}</p>
                       </CardContent>
 
                       <CardFooter className="flex justify-between items-center pt-0">
                         <div className="flex flex-wrap gap-1">
-                          {pkg.inclusions.slice(0, 2).map((inclusion, index) => (
-                            <span
-                              key={index}
-                              className="inline-block bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-xs px-2 py-1 rounded-full"
-                            >
-                              {inclusion}
-                            </span>
-                          ))}
-                          {pkg.inclusions.length > 2 && (
-                            <span className="inline-block bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-xs px-2 py-1 rounded-full">
-                              +{pkg.inclusions.length - 2} more
-                            </span>
-                          )}
+                          {(() => {
+                            const defaultInclusions = ["Hotel Stay", "Meals", "Sightseeing"];
+                            let packageInclusions: string[];
+                            
+                            if (typeof pkg.inclusions === 'string') {
+                              // If it's a string, use default inclusions
+                              packageInclusions = defaultInclusions;
+                            } else if (Array.isArray(pkg.inclusions)) {
+                              // If it's an array, use it
+                              packageInclusions = pkg.inclusions;
+                            } else {
+                              // Fallback to default inclusions
+                              packageInclusions = defaultInclusions;
+                            }
+
+                            return packageInclusions.slice(0, 2).map((inclusion, index) => (
+                              <span
+                                key={index}
+                                className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary"
+                              >
+                                {inclusion}
+                              </span>
+                            ));
+                          })()}
                         </div>
-                        <Button asChild variant="ghost" className="text-primary hover:text-primary/80 p-0 group">
-                          <Link href={`/packages/${pkg.slug}`} className="flex items-center">
+                        <Button asChild size="sm" className="gap-2">
+                          <Link href={`/packages/${pkg.slug}`}>
                             View Details
-                            <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                            <ArrowRight className="h-4 w-4" />
                           </Link>
                         </Button>
                       </CardFooter>

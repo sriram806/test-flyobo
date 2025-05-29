@@ -245,10 +245,10 @@ export default function PackageDetail() {
               </div>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              {packageData.name}
+              {packageData.name.replace(/^"+|"+$/g, "")}
             </h1>
             <p className="text-lg text-white/90 max-w-3xl">
-              {packageData.description}
+              {packageData.description.replace(/^"+|"+$/g, "")}
             </p>
           </div>
         </div>
@@ -282,27 +282,37 @@ export default function PackageDetail() {
                 </div>
 
                 <div className="p-6">
-                  <TabsContent value="overview" className="space-y-6">
+                  <TabsContent value="overview" className="space-y-8">
                     <div className="prose dark:prose-invert max-w-none">
-                      <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed">
-                        {packageData.longDescription}
-                      </p>
+                      <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm border border-gray-100 dark:border-gray-700">
+                        <h2 className="text-2xl font-semibold mb-6 text-gray-900 dark:text-white">About This Package</h2>
+                        <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed">
+                          {packageData.longDescription.replace(/^"+|"+$/g, "")}
+                        </p>
+                      </div>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                      <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-xl">
-                        <h3 className="text-lg font-semibold mb-4">Location</h3>
-                        <div className="flex items-center text-gray-700 dark:text-gray-300">
-                          <MapPin className="h-5 w-5 text-primary mr-3" />
-                          <span className="text-lg">{packageData.location}</span>
+                    <div className="bg-gradient-to-r from-primary/5 to-primary/10 dark:from-primary/10 dark:to-primary/20 p-8 rounded-2xl border border-primary/10 dark:border-primary/20">
+                      <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+                        <div className="text-center md:text-left">
+                          <h4 className="text-xl font-semibold mb-3 text-gray-900 dark:text-white">Ready to Experience This Journey?</h4>
+                          <p className="text-gray-600 dark:text-gray-400 max-w-md">
+                            Contact our travel experts to customize this package according to your preferences and get the best deals.
+                          </p>
                         </div>
-                      </div>
-                      <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-xl">
-                        <h3 className="text-lg font-semibold mb-4">Duration</h3>
-                        <div className="flex items-center text-gray-700 dark:text-gray-300">
-                          <Clock className="h-5 w-5 text-primary mr-3" />
-                          <span className="text-lg">{packageData.duration}</span>
-                        </div>
+                        {packageData.whatsappLink && (
+                          <a
+                            href={packageData.whatsappLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-3 bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-xl shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl min-w-[200px] justify-center"
+                          >
+                            <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                            </svg>
+                            <span className="font-semibold text-lg">Contact Expert</span>
+                          </a>
+                        )}
                       </div>
                     </div>
                   </TabsContent>
@@ -459,18 +469,7 @@ export default function PackageDetail() {
                   <TabsContent value="inclusions" className="space-y-8">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                       <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-gray-700">
-                        <h3 className="text-2xl font-semibold mb-6 flex items-center text-green-600 dark:text-green-500">
-                          <Check className="h-6 w-6 mr-3" />
-                          Inclusions
-                        </h3>
-                        <div className="space-y-4">
-                          {packageData.inclusions.map((inclusion, index) => (
-                            <div key={index} className="flex items-start gap-3 bg-gray-50 dark:bg-gray-900/50 p-4 rounded-xl border border-gray-100 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors">
-                              <Check className="h-5 w-5 text-green-500 shrink-0 mt-0.5" />
-                              <span className="text-gray-700 dark:text-gray-300">{inclusion}</span>
-                            </div>
-                          ))}
-                        </div>
+                        
                       </div>
                     </div>
 

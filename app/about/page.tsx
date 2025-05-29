@@ -6,7 +6,7 @@ export default function AboutPage() {
     <div className="bg-gray-50 dark:bg-gray-900 min-h-screen">
       <div className="bg-primary text-white py-12">
         <div className="container mx-auto px-4">
-          <h1 className="text-3xl font-bold mb-4">About TravelEase</h1>
+          <h1 className="text-3xl font-bold mb-4">About FlyOBO</h1>
           <p className="max-w-2xl">
             Learn about our story, mission, and the team behind TravelEase.
             We're passionate about creating memorable travel experiences for our customers.
