@@ -206,19 +206,25 @@ export default function PackagesPage() {
   return (
     <div className="bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 min-h-screen">
       {/* Hero Section */}
-      <div className="relative bg-primary text-white py-20 overflow-hidden">
-        <div className="absolute inset-0 bg-[url('/images/travel-bg.jpg')] bg-cover bg-center opacity-20"></div>
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-primary/70"></div>
-        <div className="container mx-auto px-4 relative">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6 animate-fade-in">
+      <div className="relative bg-sky-500 dark:bg-black text-gray-900 dark:text-white py-20 overflow-hidden">
+        {/* Background Image Layer */}
+        <div className="absolute inset-0 bg-[url('/images/travel-bg.jpg')] bg-cover bg-center opacity-25"></div>
+
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-white/90 to-sky-100/80 dark:from-black/90 dark:to-black/70"></div>
+
+        {/* Content */}
+        <div className="relative z-10 container mx-auto px-4 text-center">
+          <h1 className="text-4xl md:text-5xl font-extrabold mb-6 animate-fade-in drop-shadow-lg">
             Discover Your Perfect Journey
           </h1>
-          <p className="max-w-2xl text-lg text-white/90 leading-relaxed">
-            Explore our handpicked selection of travel packages across India.
+          <p className="max-w-2xl mx-auto text-lg text-gray-800 dark:text-white/90 leading-relaxed animate-fade-in delay-200">
+            Explore our handpicked selection of travel packages across India. <br />
             From serene beaches to majestic mountains, find your dream destination.
           </p>
         </div>
       </div>
+
 
       <div className="container mx-auto px-4 py-12">
         <div className="flex flex-col lg:flex-row gap-8">
@@ -432,9 +438,9 @@ export default function PackagesPage() {
                       <CardFooter className="flex justify-between items-center pt-0">
                         <div className="flex flex-wrap gap-1">
                           {(() => {
-                            const defaultInclusions = ["Hotel Stay", "Meals", "Sightseeing"];
+                            const defaultInclusions = ["", "", ""];
                             let packageInclusions: string[];
-                            
+
                             if (typeof pkg.inclusions === 'string') {
                               // If it's a string, use default inclusions
                               packageInclusions = defaultInclusions;
@@ -489,43 +495,61 @@ export default function PackagesPage() {
                         </Button>
 
                         <div className="flex items-center gap-1">
-                          {[...Array(totalPages)].map((_, index) => {
+                          {Array.from({ length: totalPages }).map((_, index) => {
                             const pageNumber = index + 1;
-                            // Show first page, last page, current page, and pages around current page
-                            if (
+                            const isCurrent = currentPage === pageNumber;
+                            const isVisible =
                               pageNumber === 1 ||
                               pageNumber === totalPages ||
-                              (pageNumber >= currentPage - 1 && pageNumber <= currentPage + 1)
-                            ) {
+                              (pageNumber >= currentPage - 1 && pageNumber <= currentPage + 1);
+
+                            // Track if ellipsis was already rendered
+                            let shouldRenderEllipsis = false;
+                            const prevIsEllipsis =
+                              index > 0 &&
+                              !(
+                                index === 1 ||
+                                index === totalPages - 1 ||
+                                (index >= currentPage - 2 && index <= currentPage + 2)
+                              );
+
+                            if (!isVisible && prevIsEllipsis) {
+                              shouldRenderEllipsis = true;
+                            }
+
+                            if (isVisible) {
                               return (
                                 <Button
                                   key={pageNumber}
-                                  variant={currentPage === pageNumber ? "default" : "outline"}
                                   onClick={() => handlePageChange(pageNumber)}
-                                  className={`rounded-full min-w-[40px] h-10 transition-all ${currentPage === pageNumber
-                                      ? "bg-primary text-white hover:bg-primary/90"
-                                      : "hover:bg-primary/10 hover:text-primary"
+                                  variant={isCurrent ? "default" : "outline"}
+                                  aria-label={`Go to page ${pageNumber}`}
+                                  className={`rounded-full min-w-[40px] h-10 transition-all ${isCurrent
+                                      ? "bg-primary text-white hover:bg-primary/90 dark:bg-grey-500 dark:hover:bg-grey-300"
+                                      : "hover:bg-primary/10 hover:text-primary dark:hover:bg-grey-600 dark:hover:text-white"
                                     }`}
                                 >
                                   {pageNumber}
                                 </Button>
                               );
                             } else if (
-                              pageNumber === currentPage - 2 ||
-                              pageNumber === currentPage + 2
+                              (pageNumber === currentPage - 2 || pageNumber === currentPage + 2) &&
+                              !prevIsEllipsis
                             ) {
                               return (
                                 <span
-                                  key={pageNumber}
+                                  key={`ellipsis-${pageNumber}`}
                                   className="px-2 text-gray-500 dark:text-gray-400"
                                 >
                                   ...
                                 </span>
                               );
                             }
+
                             return null;
                           })}
                         </div>
+
 
                         <Button
                           variant="outline"
