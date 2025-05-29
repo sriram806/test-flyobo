@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -23,9 +23,16 @@ import {
   Share2,
   MessageCircle,
   Heart,
-  ArrowRight
+  ArrowRight,
+  ChevronDown
 } from 'lucide-react';
 import { travelPackages, TravelPackage } from '@/lib/data';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export default function PackageDetail() {
   const params = useParams();
@@ -37,6 +44,10 @@ export default function PackageDetail() {
   const [isFavorite, setIsFavorite] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const imagesPerPage = 6;
+  const [activeTab, setActiveTab] = useState('overview');
+  const tabsRef = useRef<HTMLDivElement>(null);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
 
   useEffect(() => {
     if (params.slug) {
@@ -82,6 +93,59 @@ export default function PackageDetail() {
   const startIndex = (currentPage - 1) * imagesPerPage;
   const endIndex = startIndex + imagesPerPage;
   const currentImages = packageData?.gallery.slice(startIndex, endIndex) || [];
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe) {
+      // Swipe left - go to next tab
+      switch (activeTab) {
+        case 'overview':
+          setActiveTab('gallery');
+          break;
+        case 'gallery':
+          setActiveTab('inclusions');
+          break;
+        case 'inclusions':
+          setActiveTab('itinerary');
+          break;
+        case 'itinerary':
+          setActiveTab('policies');
+          break;
+      }
+    } else if (isRightSwipe) {
+      // Swipe right - go to previous tab
+      switch (activeTab) {
+        case 'policies':
+          setActiveTab('itinerary');
+          break;
+        case 'itinerary':
+          setActiveTab('inclusions');
+          break;
+        case 'inclusions':
+          setActiveTab('gallery');
+          break;
+        case 'gallery':
+          setActiveTab('overview');
+          break;
+      }
+    }
+
+    setTouchStart(null);
+    setTouchEnd(null);
+  };
 
   if (loading) {
     return (
@@ -260,28 +324,33 @@ export default function PackageDetail() {
           {/* Package Details */}
           <div className="lg:col-span-2 space-y-8">
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-100 dark:border-gray-700">
-              <Tabs defaultValue="overview" className="w-full">
+              <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
                 <div className="border-b border-gray-200 dark:border-gray-700">
-                  <TabsList className="w-full justify-start p-0 bg-transparent">
-                    <TabsTrigger value="overview" className="px-6 py-4 data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-none border-b-2 border-transparent data-[state=active]:border-primary">
+                  <TabsList className="w-full justify-start p-0 bg-transparent overflow-x-auto flex-nowrap md:flex-wrap">
+                    <TabsTrigger value="overview" className="px-4 md:px-6 py-3 md:py-4 data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-none border-b-2 border-transparent data-[state=active]:border-primary whitespace-nowrap">
                       Overview
                     </TabsTrigger>
-                    <TabsTrigger value="gallery" className="px-6 py-4 data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-none border-b-2 border-transparent data-[state=active]:border-primary">
+                    <TabsTrigger value="gallery" className="px-4 md:px-6 py-3 md:py-4 data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-none border-b-2 border-transparent data-[state=active]:border-primary whitespace-nowrap">
                       Gallery
                     </TabsTrigger>
-                    <TabsTrigger value="inclusions" className="px-6 py-4 data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-none border-b-2 border-transparent data-[state=active]:border-primary">
-                      Inclusions & Exclusions
+                    <TabsTrigger value="inclusions" className="px-4 md:px-6 py-3 md:py-4 data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-none border-b-2 border-transparent data-[state=active]:border-primary whitespace-nowrap">
+                      Inclusions
                     </TabsTrigger>
-                    <TabsTrigger value="itinerary" className="px-6 py-4 data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-none border-b-2 border-transparent data-[state=active]:border-primary">
+                    <TabsTrigger value="itinerary" className="px-4 md:px-6 py-3 md:py-4 data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-none border-b-2 border-transparent data-[state=active]:border-primary whitespace-nowrap">
                       Itinerary
                     </TabsTrigger>
-                    <TabsTrigger value="policies" className="px-6 py-4 data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-none border-b-2 border-transparent data-[state=active]:border-primary">
+                    <TabsTrigger value="policies" className="px-4 md:px-6 py-3 md:py-4 data-[state=active]:bg-primary/10 data-[state=active]:text-primary rounded-none border-b-2 border-transparent data-[state=active]:border-primary whitespace-nowrap">
                       Policies
                     </TabsTrigger>
                   </TabsList>
                 </div>
 
-                <div className="p-6">
+                <div 
+                  className="p-4 md:p-6"
+                  onTouchStart={handleTouchStart}
+                  onTouchMove={handleTouchMove}
+                  onTouchEnd={handleTouchEnd}
+                >
                   <TabsContent value="overview" className="space-y-8">
                     <div className="prose dark:prose-invert max-w-none">
                       <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm border border-gray-100 dark:border-gray-700">
@@ -318,42 +387,42 @@ export default function PackageDetail() {
                   </TabsContent>
 
                   <TabsContent value="gallery" className="space-y-8">
-                    <div className="text-center mb-16 relative">
+                    <div className="text-center mb-8 md:mb-16 relative">
                       <div className="absolute left-1/2 -translate-x-1/2 -top-8 w-32 h-1 bg-gradient-to-r from-transparent via-primary/40 to-transparent rounded-full"></div>
-                      <h3 className="text-4xl font-bold text-gray-900 dark:text-white mb-6 bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300">
+                      <h3 className="text-2xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 md:mb-6 bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300">
                         Photo Gallery
                       </h3>
-                      <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto text-lg leading-relaxed">
+                      <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto text-base md:text-lg leading-relaxed">
                         Explore the beauty of {packageData.name} through our curated collection of stunning photographs
                       </p>
                     </div>
 
-                    <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                       {currentImages.map((image, index) => (
                         <div
                           key={index}
-                          className="break-inside-avoid relative group cursor-pointer"
+                          className="break-inside-avoid relative group cursor-pointer aspect-square"
                           onClick={() => setActiveImageIndex(startIndex + index)}
                         >
-                          <div className="relative overflow-hidden rounded-3xl transform transition-all duration-700 hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/20">
+                          <div className="relative overflow-hidden rounded-xl transform transition-all duration-700 hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/20 h-full">
                             <img
                               src={image}
                               alt={`${packageData.name} - Image ${startIndex + index + 1}`}
-                              className="w-full h-auto object-cover transition-transform duration-1000 group-hover:scale-110"
+                              className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-700">
-                              <div className="absolute bottom-0 left-0 right-0 p-8 transform translate-y-6 group-hover:translate-y-0 transition-transform duration-700">
+                              <div className="absolute bottom-0 left-0 right-0 p-4 md:p-8 transform translate-y-6 group-hover:translate-y-0 transition-transform duration-700">
                                 <div className="flex items-center justify-between">
-                                  <div className="space-y-2">
-                                    <span className="text-white text-xl font-semibold block tracking-wide">
+                                  <div className="space-y-1 md:space-y-2">
+                                    <span className="text-white text-base md:text-xl font-semibold block tracking-wide line-clamp-1">
                                       {packageData.name}
                                     </span>
-                                    <span className="text-white/80 text-sm font-medium tracking-wide">
+                                    <span className="text-white/80 text-xs md:text-sm font-medium tracking-wide">
                                       Photo {startIndex + index + 1}
                                     </span>
                                   </div>
-                                  <div className="bg-white/90 dark:bg-gray-800/90 p-4 rounded-full transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-12 shadow-lg">
-                                    <svg className="w-6 h-6 text-gray-900 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <div className="bg-white/90 dark:bg-gray-800/90 p-2 md:p-4 rounded-full transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-12 shadow-lg">
+                                    <svg className="w-4 h-4 md:w-6 md:h-6 text-gray-900 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m4-3H6" />
                                     </svg>
                                   </div>
@@ -366,23 +435,23 @@ export default function PackageDetail() {
                     </div>
 
                     {totalPages > 1 && (
-                      <div className="flex items-center justify-center gap-2 mt-12">
+                      <div className="flex items-center justify-center gap-2 mt-8 md:mt-12">
                         <button
                           onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                           disabled={currentPage === 1}
-                          className="p-3 rounded-full bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="p-2 md:p-3 rounded-full bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                          <svg className="w-6 h-6 text-gray-700 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg className="w-4 h-4 md:w-6 md:h-6 text-gray-700 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
                           </svg>
                         </button>
                         
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1 md:gap-2">
                           {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                             <button
                               key={page}
                               onClick={() => setCurrentPage(page)}
-                              className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium transition-all duration-300 ${
+                              className={`w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center text-xs md:text-sm font-medium transition-all duration-300 ${
                                 currentPage === page
                                   ? 'bg-primary text-white shadow-lg'
                                   : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
@@ -396,9 +465,9 @@ export default function PackageDetail() {
                         <button
                           onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                           disabled={currentPage === totalPages}
-                          className="p-3 rounded-full bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="p-2 md:p-3 rounded-full bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                          <svg className="w-6 h-6 text-gray-700 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg className="w-4 h-4 md:w-6 md:h-6 text-gray-700 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
                           </svg>
                         </button>
@@ -407,14 +476,14 @@ export default function PackageDetail() {
 
                     {activeImageIndex !== null && (
                       <div 
-                        className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4 backdrop-blur-xl"
+                        className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-2 md:p-4 backdrop-blur-xl"
                         onClick={() => setActiveImageIndex(null)}
                       >
                         <div className="relative w-full max-w-6xl max-h-[90vh]">
                           <img
                             src={packageData.gallery[activeImageIndex]}
                             alt={`${packageData.name} - Image ${activeImageIndex + 1}`}
-                            className="w-full h-full object-contain rounded-2xl shadow-2xl shadow-primary/20"
+                            className="w-full h-full object-contain rounded-xl md:rounded-2xl shadow-2xl shadow-primary/20"
                           />
                           
                           <button
@@ -422,9 +491,9 @@ export default function PackageDetail() {
                               e.stopPropagation();
                               setActiveImageIndex(null);
                             }}
-                            className="absolute top-8 right-8 text-white bg-black/50 hover:bg-black/70 rounded-full p-4 transition-all duration-500 hover:scale-110 hover:rotate-90 shadow-lg"
+                            className="absolute top-4 md:top-8 right-4 md:right-8 text-white bg-black/50 hover:bg-black/70 rounded-full p-2 md:p-4 transition-all duration-500 hover:scale-110 hover:rotate-90 shadow-lg"
                           >
-                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className="w-4 h-4 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
                             </svg>
                           </button>
@@ -437,9 +506,9 @@ export default function PackageDetail() {
                                 return prev === 0 ? packageData.gallery.length - 1 : prev - 1;
                               });
                             }}
-                            className="absolute left-8 top-1/2 -translate-y-1/2 text-white bg-black/50 hover:bg-black/70 rounded-full p-5 transition-all duration-500 hover:scale-110 hover:-translate-x-2 shadow-lg"
+                            className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 text-white bg-black/50 hover:bg-black/70 rounded-full p-3 md:p-5 transition-all duration-500 hover:scale-110 hover:-translate-x-2 shadow-lg"
                           >
-                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className="w-4 h-4 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
                             </svg>
                           </button>
@@ -451,14 +520,14 @@ export default function PackageDetail() {
                                 return prev === packageData.gallery.length - 1 ? 0 : prev + 1;
                               });
                             }}
-                            className="absolute right-8 top-1/2 -translate-y-1/2 text-white bg-black/50 hover:bg-black/70 rounded-full p-5 transition-all duration-500 hover:scale-110 hover:translate-x-2 shadow-lg"
+                            className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 text-white bg-black/50 hover:bg-black/70 rounded-full p-3 md:p-5 transition-all duration-500 hover:scale-110 hover:translate-x-2 shadow-lg"
                           >
-                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className="w-4 h-4 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
                             </svg>
                           </button>
 
-                          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 bg-black/50 backdrop-blur-xl text-white px-8 py-4 rounded-full text-sm font-medium tracking-wide shadow-lg">
+                          <div className="absolute bottom-4 md:bottom-8 left-1/2 -translate-x-1/2 bg-black/50 backdrop-blur-xl text-white px-4 md:px-8 py-2 md:py-4 rounded-full text-xs md:text-sm font-medium tracking-wide shadow-lg">
                             {activeImageIndex + 1} / {packageData.gallery.length}
                           </div>
                         </div>
@@ -533,101 +602,65 @@ export default function PackageDetail() {
                   </TabsContent>
 
                   <TabsContent value="itinerary" className="space-y-8">
-                    <div className="mt-8 bg-gradient-to-r from-primary/5 to-primary/10 dark:from-primary/10 dark:to-primary/20 p-8 rounded-2xl border border-primary/10 dark:border-primary/20 shadow-lg">
-                      <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-                        <div className="text-center md:text-left">
-                          <h4 className="text-xl font-semibold mb-3 text-gray-900 dark:text-white">Detailed Itinerary Available</h4>
-                          <p className="text-gray-600 dark:text-gray-400 max-w-md">
-                            Get a complete day-by-day itinerary for this package. Our travel agent will provide you with detailed information about activities, timings, and more.
+                    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-gray-700">
+                      <h3 className="text-2xl font-semibold mb-6">Detailed Itinerary</h3>
+                      <div className="space-y-6">
+                        <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-xl">
+                          <h4 className="text-xl font-semibold mb-4">Day 1: Arrival</h4>
+                          <p className="text-gray-700 dark:text-gray-300">
+                            Arrive at the destination. Transfer to hotel. Evening at leisure.
                           </p>
                         </div>
-                        {packageData.whatsappLink && (
-                          <a
-                            href={packageData.whatsappLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-3 bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-xl shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl min-w-[200px] justify-center"
-                          >
-                            <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-                            </svg>
-                            <span className="font-semibold text-lg">Get Itinerary</span>
-                          </a>
-                        )}
+                        <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-xl">
+                          <h4 className="text-xl font-semibold mb-4">Day 2: Sightseeing</h4>
+                          <p className="text-gray-700 dark:text-gray-300">
+                            Full day of sightseeing with local guide. Visit major attractions.
+                          </p>
+                        </div>
+                        {/* Add more days as needed */}
                       </div>
                     </div>
                   </TabsContent>
 
                   <TabsContent value="policies" className="space-y-8">
-                    <h3 className="text-2xl font-semibold mb-6">Booking & Cancellation Policies</h3>
+                    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-gray-700">
+                      <h3 className="text-2xl font-semibold mb-6">Booking & Cancellation Policies</h3>
+                      <div className="space-y-6">
+                        <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-xl">
+                          <h4 className="text-xl font-semibold mb-4">Payment Policy</h4>
+                          <ul className="space-y-3">
+                            <li className="flex items-start gap-3">
+                              <div className="h-6 w-6 rounded-full bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
+                                <span className="text-primary font-semibold">1</span>
+                              </div>
+                              <span className="text-gray-700 dark:text-gray-300">50% payment at the time of booking</span>
+                            </li>
+                            <li className="flex items-start gap-3">
+                              <div className="h-6 w-6 rounded-full bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
+                                <span className="text-primary font-semibold">2</span>
+                              </div>
+                              <span className="text-gray-700 dark:text-gray-300">Remaining 50% payment 14 days before the trip</span>
+                            </li>
+                          </ul>
+                        </div>
 
-                    <div className="space-y-6">
-                      <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-xl">
-                        <h4 className="text-xl font-semibold mb-4">Payment Policy</h4>
-                        <ul className="space-y-3">
-                          <li className="flex items-start gap-3">
-                            <div className="h-6 w-6 rounded-full bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
-                              <span className="text-primary font-semibold">1</span>
-                            </div>
-                            <span className="text-gray-700 dark:text-gray-300">50% payment at the time of booking</span>
-                          </li>
-                          <li className="flex items-start gap-3">
-                            <div className="h-6 w-6 rounded-full bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
-                              <span className="text-primary font-semibold">2</span>
-                            </div>
-                            <span className="text-gray-700 dark:text-gray-300">Remaining 50% payment 14 days before the trip</span>
-                          </li>
-                          <li className="flex items-start gap-3">
-                            <div className="h-6 w-6 rounded-full bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
-                              <span className="text-primary font-semibold">3</span>
-                            </div>
-                            <span className="text-gray-700 dark:text-gray-300">For bookings made within 14 days of the trip, 100% payment is required</span>
-                          </li>
-                        </ul>
-                      </div>
-
-                      <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-xl">
-                        <h4 className="text-xl font-semibold mb-4">Cancellation Policy</h4>
-                        <ul className="space-y-3">
-                          <li className="flex items-start gap-3">
-                            <div className="h-6 w-6 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center shrink-0 mt-0.5">
-                              <span className="text-red-600 dark:text-red-400 font-semibold">1</span>
-                            </div>
-                            <span className="text-gray-700 dark:text-gray-300">30+ days before departure: 90% refund</span>
-                          </li>
-                          <li className="flex items-start gap-3">
-                            <div className="h-6 w-6 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center shrink-0 mt-0.5">
-                              <span className="text-red-600 dark:text-red-400 font-semibold">2</span>
-                            </div>
-                            <span className="text-gray-700 dark:text-gray-300">15-29 days before departure: 70% refund</span>
-                          </li>
-                          <li className="flex items-start gap-3">
-                            <div className="h-6 w-6 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center shrink-0 mt-0.5">
-                              <span className="text-red-600 dark:text-red-400 font-semibold">3</span>
-                            </div>
-                            <span className="text-gray-700 dark:text-gray-300">7-14 days before departure: 50% refund</span>
-                          </li>
-                          <li className="flex items-start gap-3">
-                            <div className="h-6 w-6 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center shrink-0 mt-0.5">
-                              <span className="text-red-600 dark:text-red-400 font-semibold">4</span>
-                            </div>
-                            <span className="text-gray-700 dark:text-gray-300">Less than 7 days before departure: No refund</span>
-                          </li>
-                        </ul>
-                      </div>
-
-                      <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-xl">
-                        <h4 className="text-xl font-semibold mb-4">Refund Processing</h4>
-                        <p className="text-gray-700 dark:text-gray-300">
-                          All refunds will be processed within 7-10 working days after the cancellation is confirmed. Refunds will be made to the original payment method used for booking.
-                        </p>
-                      </div>
-
-                      <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-xl">
-                        <h4 className="text-xl font-semibold mb-4">Booking Modifications</h4>
-                        <p className="text-gray-700 dark:text-gray-300">
-                          Changes to booking dates are subject to availability and may incur additional charges. Modifications must be requested at least 14 days before the trip.
-                        </p>
+                        <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-xl">
+                          <h4 className="text-xl font-semibold mb-4">Cancellation Policy</h4>
+                          <ul className="space-y-3">
+                            <li className="flex items-start gap-3">
+                              <div className="h-6 w-6 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center shrink-0 mt-0.5">
+                                <span className="text-red-600 dark:text-red-400 font-semibold">1</span>
+                              </div>
+                              <span className="text-gray-700 dark:text-gray-300">30+ days before departure: 90% refund</span>
+                            </li>
+                            <li className="flex items-start gap-3">
+                              <div className="h-6 w-6 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center shrink-0 mt-0.5">
+                                <span className="text-red-600 dark:text-red-400 font-semibold">2</span>
+                              </div>
+                              <span className="text-gray-700 dark:text-gray-300">15-29 days before departure: 70% refund</span>
+                            </li>
+                          </ul>
+                        </div>
                       </div>
                     </div>
                   </TabsContent>
