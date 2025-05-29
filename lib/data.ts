@@ -106,7 +106,7 @@ export const travelPackages: TravelPackage[] = [
       "https://www.travsie.com/destination/kashmir/big/11.jpg",
       "https://www.travsie.com/destination/kashmir/big/12.jpg"
     ],
-    "featured": false,
+    "featured": true,
     "rating": 0,
     "reviewCount": 0,
     "duration": "5 Days / 3 Nights",
@@ -1471,7 +1471,7 @@ export const travelPackages: TravelPackage[] = [
       "https://www.travsie.com/destination/kashmir/big/11.jpg",
       "https://www.travsie.com/destination/kashmir/big/12.jpg"
     ],
-    "featured": false,
+    "featured": true,
     "rating": 0,
     "reviewCount": 0,
     "duration": "7 Days / 5 Nights",
@@ -10246,7 +10246,7 @@ export const travelPackages: TravelPackage[] = [
       "https://www.travsie.com/destination/kerala/big/11.jpg",
       "https://www.travsie.com/destination/kerala/big/12.jpg"
     ],
-    "featured": false,
+    "featured": true,
     "rating": 0,
     "reviewCount": 0,
     "duration": "9 Days / 7 Nights",
@@ -15009,7 +15009,7 @@ export const travelPackages: TravelPackage[] = [
       "https://www.travsie.com/destination/uttar%20pradesh/big/11.jpg",
       "https://www.travsie.com/destination/uttar%20pradesh/big/12.jpg"
     ]
-    , "featured": false,
+    , "featured": true,
     "rating": 0,
     "reviewCount": 0,
     "duration": "#N/A",
@@ -17115,7 +17115,7 @@ export const travelPackages: TravelPackage[] = [
       "https://www.travsie.com/destination/north%20east/big/11.jpg",
       "https://www.travsie.com/destination/north%20east/big/12.jpg"
     ]
-    , "featured": false,
+    , "featured": true,
     "rating": 0,
     "reviewCount": 0,
     "duration": "7 Days / 5 Nights",
@@ -17154,7 +17154,7 @@ export const travelPackages: TravelPackage[] = [
       "https://www.travsie.com/destination/north%20east/big/11.jpg",
       "https://www.travsie.com/destination/north%20east/big/12.jpg"
     ]
-    , "featured": false,
+    , "featured": true,
     "rating": 0,
     "reviewCount": 0,
     "duration": "8 Days / 6 Nights",
