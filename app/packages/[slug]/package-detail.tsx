@@ -469,7 +469,41 @@ export default function PackageDetail() {
                   <TabsContent value="inclusions" className="space-y-8">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                       <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-gray-700">
-                        
+                        <h3 className="text-2xl font-semibold mb-6 flex items-center text-green-600 dark:text-green-500">
+                          <Check className="h-6 w-6 mr-3" />
+                          Inclusions
+                        </h3>
+                        <div className="space-y-4">
+                          {(() => {
+                            const defaultInclusions = [
+                              "Hotel Stay",
+                              "Meals",
+                              "Sightseeing",
+                              "Transfers",
+                              "Guide Services"
+                            ];
+                            
+                            let packageInclusions: string[];
+                            
+                            if (typeof packageData.inclusions === 'string') {
+                              // If it's a string, use default inclusions
+                              packageInclusions = defaultInclusions;
+                            } else if (Array.isArray(packageData.inclusions)) {
+                              // If it's an array, use it
+                              packageInclusions = packageData.inclusions;
+                            } else {
+                              // Fallback to default inclusions
+                              packageInclusions = defaultInclusions;
+                            }
+
+                            return packageInclusions.map((inclusion: string, index: number) => (
+                              <div key={index} className="flex items-start gap-3 bg-gray-50 dark:bg-gray-900/50 p-4 rounded-xl border border-gray-100 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors">
+                                <Check className="h-5 w-5 text-green-500 shrink-0 mt-0.5" />
+                                <span className="text-gray-700 dark:text-gray-300">{inclusion}</span>
+                              </div>
+                            ));
+                          })()}
+                        </div>
                       </div>
                     </div>
 

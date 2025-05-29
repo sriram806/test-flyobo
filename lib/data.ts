@@ -23208,14 +23208,14 @@ export const travelPackages: TravelPackage[] = [
 ]
 
 export const packageInclusions: PackageInclusion[] = [
-  { id: 1, name: "Accommodation" },
-  { id: 2, name: "Flights" },
-  { id: 3, name: "Meals" },
-  { id: 4, name: "Activities" },
-  { id: 5, name: "Transportation" },
-  { id: 6, name: "Sightseeing" },
-  { id: 7, name: "Visa Assistance" },
-  { id: 8, name: "Travel Insurance" },
+  { id: 1, name: "" },
+  { id: 2, name: "" },
+  { id: 3, name: "" },
+  { id: 4, name: "" },
+  { id: 5, name: "" },
+  { id: 6, name: "" },
+  { id: 7, name: "" },
+  { id: 8, name: "" },
 ];
 
 export interface FaqItem {
