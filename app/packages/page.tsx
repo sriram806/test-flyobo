@@ -277,25 +277,41 @@ export default function PackagesPage() {
                       <SelectValue placeholder="All destinations" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="all-destinations">All destinations</SelectItem>
-                      <SelectItem value="Goa">Goa</SelectItem>
-                      <SelectItem value="Kerala">Kerala</SelectItem>
-                      <SelectItem value="Rajasthan">Rajasthan</SelectItem>
-                      <SelectItem value="Himachal Pradesh">Himachal Pradesh</SelectItem>
+                      <SelectItem value="all-destinations">All Destinations</SelectItem>
                       <SelectItem value="Andaman">Andaman</SelectItem>
-                      <SelectItem value="Delhi-Agra-Jaipur">Golden Triangle</SelectItem>
+                      <SelectItem value="Bali">Bali</SelectItem>
+                      <SelectItem value="Bhutan">Bhutan</SelectItem>
+                      <SelectItem value="Chhattisgarh">Chhattisgarh</SelectItem>
+                      <SelectItem value="Dubai">Dubai</SelectItem>
+                      <SelectItem value="Goa">Goa</SelectItem>
+                      <SelectItem value="Gujarat">Gujarat</SelectItem>
+                      <SelectItem value="Himachal">Himachal Pradesh</SelectItem>
+                      <SelectItem value="Karnataka">Karnataka</SelectItem>
+                      <SelectItem value="Kashmir">Kashmir</SelectItem>
+                      <SelectItem value="Kerala">Kerala</SelectItem>
+                      <SelectItem value="Ladakh">Ladakh</SelectItem>
+                      <SelectItem value="Madhya Pradesh">Madhya Pradesh</SelectItem>
+                      <SelectItem value="Maharashtra">Maharashtra</SelectItem>
+                      <SelectItem value="Nepal">Nepal</SelectItem>
+                      <SelectItem value="North East">North East</SelectItem>
+                      <SelectItem value="Rajasthan">Rajasthan</SelectItem>
+                      <SelectItem value="Tamil Nadu">Tamil Nadu</SelectItem>
+                      <SelectItem value="Thailand">Thailand</SelectItem>
+                      <SelectItem value="Uttar Pradesh">Uttar Pradesh</SelectItem>
+                      <SelectItem value="Uttarakhand">Uttarakhand</SelectItem>
                     </SelectContent>
+
                   </Select>
                 </div>
 
                 {/* Price Range Filter */}
                 <div>
-                  <div className="flex justify-between mb-3">
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-1 sm:gap-0">
+                    <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
                       Price Range
                     </label>
-                    <span className="text-sm text-primary font-medium">
-                      ₹{filters.priceRange[0].toLocaleString()} - ₹{filters.priceRange[1].toLocaleString()}
+                    <span className="text-sm font-semibold text-primary">
+                      ₹{filters?.priceRange?.[0]?.toLocaleString() ?? 0} - ₹{filters?.priceRange?.[1]?.toLocaleString() ?? 0}
                     </span>
                   </div>
                   <Slider
@@ -430,9 +446,13 @@ export default function PackagesPage() {
                         </div>
                         <div className="flex items-center text-gray-600 dark:text-gray-400 mb-3">
                           <Clock className="h-4 w-4 mr-2 text-primary" />
-                          <span className="text-sm">{pkg.duration}</span>
+                          <span className="text-sm font-medium tracking-wide bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
+                            {(pkg.Titleref.split('-')[1]?.trim() || pkg.Titleref).replace(/^"+|"+$/g, "")}
+                          </span>
                         </div>
-                        <p className="text-gray-700 dark:text-gray-300 line-clamp-2 text-sm">{pkg.description.replace(/^"+|"+$/g, "")}</p>
+                        <p className="text-gray-700 dark:text-gray-300 line-clamp-2 text-sm">
+                          {pkg.description.replace(/^"+|"+$/g, "").replace(/""/g, "")}
+                        </p>
                       </CardContent>
 
                       <CardFooter className="flex justify-between items-center pt-0">
@@ -525,8 +545,8 @@ export default function PackagesPage() {
                                   variant={isCurrent ? "default" : "outline"}
                                   aria-label={`Go to page ${pageNumber}`}
                                   className={`rounded-full min-w-[40px] h-10 transition-all ${isCurrent
-                                      ? "bg-primary text-white hover:bg-primary/90 dark:bg-grey-500 dark:hover:bg-grey-300"
-                                      : "hover:bg-primary/10 hover:text-primary dark:hover:bg-grey-600 dark:hover:text-white"
+                                    ? "bg-primary text-white hover:bg-primary/90 dark:bg-grey-500 dark:hover:bg-grey-300"
+                                    : "hover:bg-primary/10 hover:text-primary dark:hover:bg-grey-600 dark:hover:text-white"
                                     }`}
                                 >
                                   {pageNumber}

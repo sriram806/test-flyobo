@@ -4,35 +4,11 @@ import { useEffect, useState, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger
-} from '@/components/ui/tabs';
+import { Tabs,TabsContent,TabsList,TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
-import {
-  MapPin,
-  Clock,
-  Star,
-  Calendar,
-  Users,
-  Check,
-  X,
-  ChevronLeft,
-  Share2,
-  MessageCircle,
-  Heart,
-  ArrowRight,
-  ChevronDown
-} from 'lucide-react';
+import { MapPin,Clock,Star,Calendar,Users,Check,X,ChevronLeft,Share2,MessageCircle,Heart,ArrowRight,ChevronDown } from 'lucide-react';
 import { travelPackages, TravelPackage } from '@/lib/data';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { DropdownMenu,DropdownMenuContent,DropdownMenuItem,DropdownMenuTrigger,} from "@/components/ui/dropdown-menu";
 
 export default function PackageDetail() {
   const params = useParams();
@@ -301,7 +277,9 @@ export default function PackageDetail() {
               </div>
               <div className="flex items-center gap-2 bg-black/30 px-4 py-2 rounded-lg">
                 <Clock className="h-5 w-5" />
-                <span className="text-sm">{packageData.duration}</span>
+                <span className="text-sm font-medium tracking-wide bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">
+                  {packageData.Titleref}
+                </span>
               </div>
               <div className="flex items-center gap-2 bg-black/30 px-4 py-2 rounded-lg">
                 <Star className="h-5 w-5 text-yellow-400" />
