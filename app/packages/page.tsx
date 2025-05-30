@@ -215,9 +215,12 @@ export default function PackagesPage() {
 
         {/* Content */}
         <div className="relative z-10 container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-extrabold mb-6 animate-fade-in drop-shadow-lg">
-            Discover Your Perfect Journey
+          <h1 className="text-4xl md:text-5xl font-extrabold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-sky-300 via-sky-600 to-sky-900 animate-fade-in drop-shadow-md">
+            Discover Your Perfect Journey✈️
           </h1>
+          <div className="flex justify-center">
+            <span className="h-1 w-28 bg-gradient-to-r from-sky-300 to-sky-600 rounded-full shadow-md"></span>
+          </div>
           <p className="max-w-2xl mx-auto text-lg text-gray-800 dark:text-white/90 leading-relaxed animate-fade-in delay-200">
             Explore our handpicked selection of travel packages across India. <br />
             From serene beaches to majestic mountains, find your dream destination.
@@ -419,10 +422,10 @@ export default function PackagesPage() {
                 <div id="packages-section" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {currentPackages.map((pkg) => (
                     <Card key={pkg.id} className="overflow-hidden transition-all duration-300 hover:shadow-xl border border-gray-100 dark:border-gray-700 group">
-                      
+
                       {/* Image Section with Validity Badge */}
                       <div className="relative h-48 w-full overflow-hidden">
-                         {/* Package Validity Badge */}
+                        {/* Package Validity Badge */}
                         {pkg.Packagevalidity && (
                           <div className="absolute top-4 left-4 bg-black/50 dark:bg-gray-800/50 backdrop-blur-sm text-white text-xs font-medium px-3 py-1.5 rounded-full z-10">
                             {pkg.Packagevalidity}

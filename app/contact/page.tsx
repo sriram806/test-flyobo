@@ -24,12 +24,15 @@ export default function ContactPage() {
 
         {/* Content */}
         <div className="relative z-10 container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-extrabold mb-6 animate-fade-in drop-shadow-lg">
-            Let's Connect
+          <h1 className="text-4xl md:text-5xl font-extrabold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-sky-300 via-sky-600 to-sky-900 animate-fade-in drop-shadow-md">
+            Let's Connect📞
           </h1>
+          <div className="flex justify-center">
+            <span className="h-1 w-28 bg-gradient-to-r from-sky-300 to-sky-600 rounded-full shadow-md"></span>
+          </div>
           <p className="max-w-2xl mx-auto text-lg text-gray-800 dark:text-white/90 leading-relaxed animate-fade-in delay-200">
             Have questions about our travel packages or need assistance with booking?
-            <br/>We're here to help you plan your perfect journey.
+            <br />We're here to help you plan your perfect journey.
           </p>
         </div>
       </div>
