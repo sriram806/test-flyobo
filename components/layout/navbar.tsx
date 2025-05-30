@@ -38,9 +38,9 @@ export function Navbar() {
     >
       <nav className="mx-auto flex max-w-7xl items-center justify-between p-4 lg:px-8">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2">
-          <Image src="/images/logo.png" alt="Flyobo logo" width={36} height={36} />
-          <Image src="/images/banner.png" alt="Flyobo banner" width={100} height={32} />
+        <Link href="/" className="flex items-center">
+          <Image src="/images/logo.png" alt="Flyobo logo" width={36} height={30} />
+          <Image src="/images/banner.png" alt="Flyobo banner" width={100} height={30} />
         </Link>
 
         {/* Desktop Nav */}
@@ -95,7 +95,7 @@ export function Navbar() {
         }`}
       >
         <div className="flex items-center justify-between px-4 py-4 border-b dark:border-gray-700">
-          <Link href="/" className="flex items-center gap-2" onClick={() => setMobileMenuOpen(false)}>
+          <Link href="/" className="flex items-center" onClick={() => setMobileMenuOpen(false)}>
             <Image src="/images/logo.png" alt="Flyobo logo" width={32} height={32} />
             <Image src="/images/banner.png" alt="Flyobo banner" width={100} height={28} />
           </Link>

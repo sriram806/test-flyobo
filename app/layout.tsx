@@ -21,14 +21,18 @@ export const metadata: Metadata = {
     description: 'Find and book amazing travel packages to destinations worldwide. Best prices guaranteed.',
     images: [
       {
-        url: 'https://images.pexels.com/photos/3155666/pexels-photo-3155666.jpeg',
+        url: '/images/banner.png',
         width: 1200,
         height: 630,
         alt: 'Flyobo - Book Your Dream Vacation',
       },
     ],
   },
+  icons: {
+    icon: '/images/icon.png',
+  },
 };
+
 
 export default function RootLayout({
   children,
