@@ -61,7 +61,9 @@ export function FeaturedPackages() {
                 </div>
                 <div className="flex items-center text-gray-600 dark:text-gray-400">
                   <Clock className="h-4 w-4 mr-2 text-primary" />
-                  <span className="text-sm">{pkg.duration}</span>
+                  <span className="text-sm font-medium tracking-wide bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
+                    {(pkg.Titleref.split('-')[1]?.trim() || pkg.Titleref).replace(/^"+|"+$/g, "")}
+                  </span>
                 </div>
                 <p className="text-gray-700 dark:text-gray-300 line-clamp-3 text-sm leading-relaxed">{pkg.description.replace(/^"+|"+$/g, "").replace(/""/g, "")}</p>
               </CardContent>
