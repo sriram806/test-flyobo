@@ -31,7 +31,7 @@ export function DestinationHighlights() {
         <div className="text-center mb-20">
           {/* Gradient Heading with Glow */}
           <h2 className="text-4xl md:text-5xl font-extrabold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-sky-300 via-sky-600 to-sky-900 animate-fade-in drop-shadow-md">
-            ✨ Featured Travel Packages ✨
+            ✨ Our Top Destinations ✨
           </h2>
 
           {/* Decorative Gradient Underline */}
