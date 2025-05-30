@@ -14697,7 +14697,7 @@ export const travelPackages: TravelPackage[] = [
       "https://www.travsie.com/destination/ladakh/big/11.jpg",
       "https://www.travsie.com/destination/ladakh/big/12.jpg"
     ],
-    "featured": false,
+    "featured": true,
     "rating": 0,
     "reviewCount": 0,
     "duration": "7 Days / 5 Nights",
@@ -15009,7 +15009,7 @@ export const travelPackages: TravelPackage[] = [
       "https://www.travsie.com/destination/uttar%20pradesh/big/11.jpg",
       "https://www.travsie.com/destination/uttar%20pradesh/big/12.jpg"
     ]
-    , "featured": true,
+    , "featured": false,
     "rating": 0,
     "reviewCount": 0,
     "duration": "#N/A",
