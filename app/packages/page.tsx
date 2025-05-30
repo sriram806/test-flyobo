@@ -419,7 +419,15 @@ export default function PackagesPage() {
                 <div id="packages-section" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {currentPackages.map((pkg) => (
                     <Card key={pkg.id} className="overflow-hidden transition-all duration-300 hover:shadow-xl border border-gray-100 dark:border-gray-700 group">
-                      <div className="relative h-48 overflow-hidden">
+                      
+                      {/* Image Section with Validity Badge */}
+                      <div className="relative h-48 w-full overflow-hidden">
+                         {/* Package Validity Badge */}
+                        {pkg.Packagevalidity && (
+                          <div className="absolute top-4 left-4 bg-black/50 dark:bg-gray-800/50 backdrop-blur-sm text-white text-xs font-medium px-3 py-1.5 rounded-full z-10">
+                            {pkg.Packagevalidity}
+                          </div>
+                        )}
                         <img
                           src={pkg.image}
                           alt={pkg.name}
