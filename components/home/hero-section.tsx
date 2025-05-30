@@ -39,9 +39,9 @@ export function HeroSection() {
   return (
     <div className="relative">
       {/* Background Image */}
-      <div 
+      <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ 
+        style={{
           backgroundImage: "url('https://images.pexels.com/photos/3155666/pexels-photo-3155666.jpeg')",
           height: "100%",
           width: "100%"
@@ -49,7 +49,7 @@ export function HeroSection() {
       >
         <div className="absolute inset-0 bg-black opacity-50"></div>
       </div>
-      
+
       {/* Content */}
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-24 md:py-32 lg:py-40">
         <div className="text-center">
@@ -59,7 +59,7 @@ export function HeroSection() {
           <p className="mx-auto mt-6 max-w-xl text-lg text-gray-300">
             Explore our handpicked travel packages and embark on the journey of a lifetime. Best prices guaranteed.
           </p>
-          
+
           {/* Search Form */}
           <div className="mt-10">
             <form
@@ -74,7 +74,9 @@ export function HeroSection() {
                   placeholder="Enter the destination"
                   className="w-full pl-10 bg-white text-gray-900"
                   value={searchParams.destination}
-                  onChange={(e) => setSearchParams(prev => ({ ...prev, destination: e.target.value }))}
+                  onChange={(e) =>
+                    setSearchParams((prev) => ({ ...prev, destination: e.target.value }))
+                  }
                 />
               </div>
 
@@ -84,10 +86,12 @@ export function HeroSection() {
                 <div>
                   <Select
                     value={searchParams.duration}
-                    onValueChange={(value) => setSearchParams(prev => ({ ...prev, duration: value }))}
+                    onValueChange={(value) =>
+                      setSearchParams((prev) => ({ ...prev, duration: value }))
+                    }
                   >
                     <SelectTrigger className="w-full bg-white text-gray-900">
-                       <Clock className="mr-2 h-4 w-4 opacity-50" />
+                      <Clock className="mr-2 h-4 w-4 opacity-50" />
                       <SelectValue placeholder="Select duration" />
                     </SelectTrigger>
                     <SelectContent>
@@ -103,14 +107,16 @@ export function HeroSection() {
                 <div>
                   <Select
                     value={searchParams.month}
-                    onValueChange={(value) => setSearchParams(prev => ({ ...prev, month: value }))}
+                    onValueChange={(value) =>
+                      setSearchParams((prev) => ({ ...prev, month: value }))
+                    }
                   >
                     <SelectTrigger className="w-full bg-white text-gray-900">
-                       <CalendarIcon className="mr-2 h-4 w-4 opacity-50" />
+                      <CalendarIcon className="mr-2 h-4 w-4 opacity-50" />
                       <SelectValue placeholder="Select month" />
                     </SelectTrigger>
                     <SelectContent>
-                       <SelectItem value="january">January</SelectItem>
+                      <SelectItem value="january">January</SelectItem>
                       <SelectItem value="february">February</SelectItem>
                       <SelectItem value="march">March</SelectItem>
                       <SelectItem value="april">April</SelectItem>
@@ -127,42 +133,42 @@ export function HeroSection() {
                 </div>
               </div>
 
-              <Button type="submit" className="w-full sm:w-auto bg-red-500 hover:bg-red-600">
+              <Button type="submit" className="w-full sm:w-auto bg-sky-500 hover:bg-sky-600">
                 View Packages
               </Button>
             </form>
           </div>
-          
+
           {/* Quick Links */}
           <div className="mt-8">
             <p className="text-sm text-gray-300 mb-2">Popular Destinations:</p>
             <div className="flex flex-wrap justify-center gap-2">
-              <Link 
-                href="/packages?location=Goa" 
+              <Link
+                href="/packages?destination=Goa"
                 className="rounded-full bg-white/20 px-4 py-1 text-sm text-white hover:bg-white/30 transition-colors"
               >
                 Goa
               </Link>
-              <Link 
-                href="/packages?location=Kerala" 
+              <Link
+                href="/packages?destination=Kerala"
                 className="rounded-full bg-white/20 px-4 py-1 text-sm text-white hover:bg-white/30 transition-colors"
               >
                 Kerala
               </Link>
-              <Link 
-                href="/packages?location=Rajasthan" 
+              <Link
+                href="/packages?destination=Rajasthan"
                 className="rounded-full bg-white/20 px-4 py-1 text-sm text-white hover:bg-white/30 transition-colors"
               >
                 Rajasthan
               </Link>
-              <Link 
-                href="/packages?location=Himachal Pradesh" 
+              <Link
+                href="/packages?destination=Himachal"
                 className="rounded-full bg-white/20 px-4 py-1 text-sm text-white hover:bg-white/30 transition-colors"
               >
                 Himachal
               </Link>
-              <Link 
-                href="/packages?location=Andaman" 
+              <Link
+                href="/packages?destination=Andaman"
                 className="rounded-full bg-white/20 px-4 py-1 text-sm text-white hover:bg-white/30 transition-colors"
               >
                 Andaman
