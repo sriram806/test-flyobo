@@ -25,7 +25,7 @@ export function Footer() {
               Making your travel dreams come true since 2024. Unbeatable prices, unforgettable experiences.
             </p>
             <div className="mt-6 flex gap-4">
-              <a href="#" className="hover:text-sky-400 transition-all duration-200">
+              <a href="https://www.facebook.com/flyobo/" className="hover:text-sky-400 transition-all duration-200">
                 <Facebook className="h-6 w-6" />
               </a>
               <a href="https://www.instagram.com/flyobo/" className="hover:text-pink-400 transition-all duration-200">

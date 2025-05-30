@@ -4,16 +4,25 @@ import Link from 'next/link';
 export default function AboutPage() {
   return (
     <div className="bg-gray-50 dark:bg-gray-900 min-h-screen">
-      <div className="bg-primary text-white py-12">
-        <div className="container mx-auto px-4">
-          <h1 className="text-3xl font-bold mb-4">About FlyOBO</h1>
-          <p className="max-w-2xl">
-            Learn about our story, mission, and the team behind TravelEase.
+      <div className="relative bg-sky-500 dark:bg-black text-gray-900 dark:text-white py-20 overflow-hidden">
+        {/* Background Image Layer */}
+        <div className="absolute inset-0 bg-[url('/images/travel-bg.jpg')] bg-cover bg-center opacity-25"></div>
+
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-white/90 to-sky-100/80 dark:from-black/90 dark:to-black/70"></div>
+
+        {/* Content */}
+        <div className="relative z-10 container mx-auto px-4 text-center">
+          <h1 className="text-4xl md:text-5xl font-extrabold mb-6 animate-fade-in drop-shadow-lg">
+            About FlyOBO
+          </h1>
+          <p className="max-w-2xl mx-auto text-lg text-gray-800 dark:text-white/90 leading-relaxed animate-fade-in delay-200">
+            Learn about our story, mission, and the team behind TravelEase.<br />
             We're passionate about creating memorable travel experiences for our customers.
           </p>
         </div>
       </div>
-      
+
       {/* Our Story Section */}
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
@@ -37,7 +46,7 @@ export default function AboutPage() {
             />
           </div>
         </div>
-        
+
         {/* Our Mission Section */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 mb-16">
           <div className="max-w-3xl mx-auto text-center">
@@ -82,17 +91,17 @@ export default function AboutPage() {
             </div>
           </div>
         </div>
-        
+
         {/* Team Section */}
         <div className="mb-16">
           <div className="text-center mb-12">
             <h2 className="text-2xl font-bold mb-4">Meet Our Team</h2>
             <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-              Our diverse team of travel experts is passionate about creating amazing experiences for our customers. 
+              Our diverse team of travel experts is passionate about creating amazing experiences for our customers.
               With decades of combined experience in the travel industry, we're here to make your dream vacation a reality.
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
               {
@@ -104,8 +113,8 @@ export default function AboutPage() {
             ].map((member, index) => (
               <div key={index} className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
                 <div className="h-64 overflow-hidden">
-                  <img 
-                    src={member.image} 
+                  <img
+                    src={member.image}
                     alt={member.name}
                     className="w-full h-full object-cover"
                   />
@@ -121,12 +130,12 @@ export default function AboutPage() {
             ))}
           </div>
         </div>
-        
+
         {/* Why Choose Us Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
           <div className="order-2 lg:order-1">
             <h2 className="text-2xl font-bold mb-6">Why Choose TravelEase?</h2>
-            
+
             <div className="space-y-6">
               <div className="flex">
                 <div className="mr-4 bg-primary/10 text-primary p-3 rounded-full h-12 w-12 flex items-center justify-center shrink-0">
@@ -141,7 +150,7 @@ export default function AboutPage() {
                   </p>
                 </div>
               </div>
-              
+
               <div className="flex">
                 <div className="mr-4 bg-primary/10 text-primary p-3 rounded-full h-12 w-12 flex items-center justify-center shrink-0">
                   <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -155,7 +164,7 @@ export default function AboutPage() {
                   </p>
                 </div>
               </div>
-              
+
               <div className="flex">
                 <div className="mr-4 bg-primary/10 text-primary p-3 rounded-full h-12 w-12 flex items-center justify-center shrink-0">
                   <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -169,7 +178,7 @@ export default function AboutPage() {
                   </p>
                 </div>
               </div>
-              
+
               <div className="flex">
                 <div className="mr-4 bg-primary/10 text-primary p-3 rounded-full h-12 w-12 flex items-center justify-center shrink-0">
                   <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -185,7 +194,7 @@ export default function AboutPage() {
               </div>
             </div>
           </div>
-          
+
           <div className="order-1 lg:order-2 grid grid-cols-2 gap-4">
             <div className="aspect-square rounded-lg overflow-hidden">
               <img
@@ -217,25 +226,50 @@ export default function AboutPage() {
             </div>
           </div>
         </div>
-        
+
         {/* CTA Section */}
-        <div className="bg-primary text-white rounded-lg shadow-lg p-8 text-center">
-          <h2 className="text-2xl font-bold mb-4">Ready to Start Your Journey?</h2>
-          <p className="mb-6 max-w-2xl mx-auto">
-            Today, Flyobo offers a wide range of carefully curated travel packages to destinations across India and internationally, with plans to expand to more places in the near future. Despite our growth, we remain committed to our core values of integrity, excellence, and customer-centricity.
+        <div className="bg-primary text-white dark:bg-gray-900 dark:text-white rounded-xl shadow-2xl p-8 sm:p-12 text-center transition-all duration-300">
+          {/* Heading */}
+          <h2 className="text-3xl sm:text-4xl font-extrabold mb-4">
+            Ready to Start Your Journey?
+          </h2>
+
+          {/* Description */}
+          <p className="mb-8 max-w-2xl mx-auto text-base sm:text-lg leading-relaxed text-white/90 dark:text-gray-300">
+            Flyobo offers a wide range of handpicked travel packages across India and abroad. With future plans to expand globally, we stay rooted in our values of integrity, excellence, and a customer-first mindset.
           </p>
+
+          {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Button asChild variant="secondary" size="lg">
+            {/* Browse Packages Button */}
+            <Button
+              asChild
+              variant="secondary"
+              size="lg"
+              className="border border-white text-black hover:bg-white hover:text-primary 
+               dark:border-gray-300 dark:text-gray-100 
+               dark:hover:bg-gray-100 dark:hover:text-gray-900 transition-all duration-200"
+            >
               <Link href="/packages">
                 Browse Packages
               </Link>
             </Button>
-            <Button asChild variant="outline" size="lg" className="bg-transparent text-white border-white hover:bg-white hover:text-primary">
+
+            {/* Contact Us Button */}
+            <Button
+              asChild
+              variant="outline"
+              size="lg"
+              className="border border-white text-black hover:bg-white hover:text-primary 
+               dark:border-gray-300 dark:text-gray-100 
+               dark:hover:bg-gray-100 dark:hover:text-gray-900 transition-all duration-200"
+            >
               <Link href="/contact">
                 Contact Us
               </Link>
             </Button>
           </div>
+
         </div>
       </div>
     </div>
