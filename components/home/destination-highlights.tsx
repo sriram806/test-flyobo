@@ -4,23 +4,23 @@ import Link from 'next/link';
 const destinations = [
   {
     name: "Goa",
-    image: "https://images.pexels.com/photos/1470405/pexels-photo-1470405.jpeg",
-    description: "Sun-kissed beaches and vibrant nightlife"
+    image: "https://www.travsie.com/destination/goa/big/1.jpg",
+    description: "Goa is a beautiful beach destination in western India."
   },
   {
     name: "Kerala",
-    image: "https://images.pexels.com/photos/2265876/pexels-photo-2265876.jpeg",
-    description: "Serene backwaters and lush greenery"
+    image: "https://www.travsie.com/destination/kerala/big/1.jpg",
+    description: "Kerala is a stunning state known for backwaters and beaches."
   },
   {
-    name: "Rajasthan",
-    image: "https://images.pexels.com/photos/1603650/pexels-photo-1603650.jpeg",
-    description: "Royal palaces and desert adventures"
+    name: "North East India",
+    image: "https://www.travsie.com/destination/north_east/big/2.jpg",
+    description: "North East India boasts stunning landscapes and diverse tribal culture."
   },
   {
-    name: "Himachal Pradesh",
-    image: "https://images.pexels.com/photos/1450082/pexels-photo-1450082.jpeg",
-    description: "Breathtaking mountain landscapes"
+    name: "Kashmir",
+    image: "https://www.travsie.com/destination/kashmir/big/2.jpg",
+    description: "Kashmir is a breathtakingly beautiful paradise with snow-capped mountains."
   }
 ];
 
@@ -28,24 +28,33 @@ export function DestinationHighlights() {
   return (
     <section className="py-16 bg-white dark:bg-gray-950">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold mb-4">Top Destinations</h2>
-          <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-            Explore our most popular destinations in India
+        <div className="text-center mb-20">
+          {/* Gradient Heading with Glow */}
+          <h2 className="text-4xl md:text-5xl font-extrabold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-sky-300 via-sky-600 to-sky-900 animate-fade-in drop-shadow-md">
+            ✨ Featured Travel Packages ✨
+          </h2>
+
+          {/* Decorative Gradient Underline */}
+          <div className="flex justify-center">
+            <span className="h-1 w-28 bg-gradient-to-r from-sky-300 to-sky-600 rounded-full shadow-md"></span>
+          </div>
+
+          {/* Subheading Paragraph */}
+          <p className="mt-6 max-w-2xl mx-auto text-lg text-gray-700 dark:text-gray-300 leading-relaxed tracking-wide animate-fade-in delay-200">
+            Embark on unforgettable journeys with our handpicked travel experiences, curated for thrill-seekers, culture lovers, and peace finders alike.
           </p>
         </div>
-        
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {destinations.map((destination, index) => (
-            <Link 
-              key={index} 
-              href={`/packages?location=${destination.name}`} 
+            <Link
+              key={index}
+              href={`/packages?location=${destination.name}`}
               className="group block"
             >
               <Card className="overflow-hidden h-full transition-transform duration-300 group-hover:shadow-lg group-hover:-translate-y-1">
                 <div className="relative h-60">
-                  <img 
-                    src={destination.image} 
+                  <img
+                    src={destination.image}
                     alt={destination.name}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
