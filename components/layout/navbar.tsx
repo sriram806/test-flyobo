@@ -11,6 +11,7 @@ import { useTheme } from "next-themes";
 const navigation = [
   { name: "Home", href: "/" },
   { name: "Packages", href: "/packages" },
+  { name: "Gallery", href: "/gallery" },
   { name: "About Us", href: "/about" },
   { name: "FAQ", href: "/#faq" },
   { name: "Contact", href: "/contact" },
