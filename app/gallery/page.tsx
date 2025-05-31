@@ -7,6 +7,11 @@ import Masonry from 'react-masonry-css';
 import { useState } from 'react';
 import Link from 'next/link';
 
+export const metadata = {
+    title: 'Customer Memories - FlyOBO Gallery',
+    description: 'Browse through heartwarming customer memories from their incredible journeys with FlyOBO. See photos from various travel adventures.',
+};
+
 export default function GalleryPage() {
     const [selectedImage, setSelectedImage] = useState<number | null>(null);
     const [isZoomed, setIsZoomed] = useState(false);

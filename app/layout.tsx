@@ -9,9 +9,21 @@ import Script from 'next/script';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Flyobo - Book Your Dream Vacation',
-  description: 'Find and book amazing travel packages to destinations worldwide. Best prices guaranteed.',
-  keywords: 'travel, vacation, holiday, packages, tours, booking',
+  metadataBase: new URL('https://flyobo.com'),
+  title: {
+    default: 'Flyobo - Book Your Dream Vacation',
+    template: '%s | Flyobo'
+  },
+  description: 'Find and book amazing travel packages to destinations worldwide. Best prices guaranteed. Experience luxury travel with Flyobo.',
+  keywords: 'travel, vacation, holiday, packages, tours, booking, luxury travel, international flights, hotel booking, travel deals',
+  authors: [{ name: 'Flyobo' }],
+  creator: 'Flyobo',
+  publisher: 'Flyobo',
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
   openGraph: {
     type: 'website',
     locale: 'en_IE',
@@ -24,12 +36,40 @@ export const metadata: Metadata = {
         url: '/images/banner.png',
         width: 1200,
         height: 630,
-        alt: 'Flyobo - Fly Off,Break Out!',
+        alt: 'Flyobo - Fly Off, Break Out!',
       },
     ],
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Flyobo - Book Your Dream Vacation',
+    description: 'Find and book amazing travel packages to destinations worldwide. Best prices guaranteed.',
+    images: ['/images/banner.png'],
+    creator: '@flyobo',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
   icons: {
     icon: '/images/icon.png',
+    shortcut: '/images/icon.png',
+    apple: '/images/icon.png',
+  },
+  verification: {
+    google: 'your-google-site-verification',
+    yandex: 'your-yandex-verification',
+    yahoo: 'your-yahoo-verification',
+  },
+  alternates: {
+    canonical: 'https://flyobo.com',
   },
 };
 
