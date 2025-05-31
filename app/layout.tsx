@@ -24,7 +24,7 @@ export const metadata: Metadata = {
         url: '/images/banner.png',
         width: 1200,
         height: 630,
-        alt: 'Flyobo - Book Your Dream Vacation',
+        alt: 'Flyobo - Fly Off,Break Out!',
       },
     ],
   },
