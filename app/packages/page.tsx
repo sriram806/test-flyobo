@@ -437,17 +437,24 @@ export default function PackagesPage() {
                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                        <div className="absolute top-4 right-4 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full px-3 py-1 text-sm font-medium flex items-center">
+
+                        {/*<div className="absolute top-4 right-4 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full px-3 py-1 text-sm font-medium flex items-center">
                           <Star className="h-4 w-4 text-yellow-400 mr-1" />
                           <span>{pkg.rating}</span>
-                        </div>
+                        </div>*/}
                       </div>
 
                       <CardHeader className="pb-2">
-                        <div className="flex justify-between items-start">
-                          <h3 className="text-lg font-bold group-hover:text-primary transition-colors line-clamp-1">{pkg.name.replace(/^"+|"+$/g, "")}</h3>
-                          <p className="text-lg font-bold text-primary">₹{pkg.price.toLocaleString()}</p>
-                        </div>
+                        <h3
+                          className="text-lg font-bold group-hover:text-primary transition-colors leading-snug overflow-hidden break-words"
+                          style={{
+                            display: "-webkit-box",
+                            WebkitLineClamp: 2,
+                            WebkitBoxOrient: "vertical",
+                          }}
+                        >
+                          {pkg.name.replace(/^"+|"+$/g, "")}
+                        </h3>
                       </CardHeader>
 
                       <CardContent className="pb-4">
@@ -460,38 +467,15 @@ export default function PackagesPage() {
                           <span className="text-sm font-medium tracking-wide bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
                             {(pkg.Titleref.split('-')[1]?.trim() || pkg.Titleref).replace(/^"+|"+$/g, "")}
                           </span>
-                        </div>
+                        </div>{/*
                         <p className="text-gray-700 dark:text-gray-300 line-clamp-2 text-sm">
-                          {pkg.description.replace(/^"+|"+$/g, "").replace(/""/g, "")}
-                        </p>
+                          {pkg.Itinerary.replace(/^"+|"+$/g, "").replace(/""/g, "")}
+                        </p>*/}
                       </CardContent>
 
                       <CardFooter className="flex justify-between items-center pt-0">
                         <div className="flex flex-wrap gap-1">
-                          {(() => {
-                            const defaultInclusions = ["", "", ""];
-                            let packageInclusions: string[];
-
-                            if (typeof pkg.inclusions === 'string') {
-                              // If it's a string, use default inclusions
-                              packageInclusions = defaultInclusions;
-                            } else if (Array.isArray(pkg.inclusions)) {
-                              // If it's an array, use it
-                              packageInclusions = pkg.inclusions;
-                            } else {
-                              // Fallback to default inclusions
-                              packageInclusions = defaultInclusions;
-                            }
-
-                            return packageInclusions.slice(0, 2).map((inclusion, index) => (
-                              <span
-                                key={index}
-                                className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary"
-                              >
-                                {inclusion}
-                              </span>
-                            ));
-                          })()}
+                          <p className="text-lg font-bold text-primary">₹{pkg.price.toLocaleString()}</p>
                         </div>
                         <Button asChild size="sm" className="gap-2">
                           <Link href={`/packages/${pkg.slug}`}>
