@@ -185,12 +185,12 @@ export default function PackageDetail() {
             </Link>
 
             <div className="flex items-center gap-3">
-              <button
+              {/* <button
                 className="text-white bg-black/30 hover:bg-black/40 rounded-lg p-2 transition-colors"
                 onClick={() => setIsFavorite(!isFavorite)}
               >
                 <Heart className={`h-5 w-5 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
-              </button>
+              </button> */}
               <div className="relative">
                 <button 
                   className="flex items-center gap-2 text-white bg-black/30 hover:bg-black/40 rounded-lg px-4 py-2 text-sm transition-colors"
