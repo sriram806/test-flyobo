@@ -652,11 +652,25 @@ export default function PackageDetail() {
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 sticky top-24 border border-gray-100 dark:border-gray-700">
               <div className="mb-6">
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Book This Package</h2>
-                <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg">
-                  <div className="flex items-baseline justify-between">
-                    <span className="text-sm text-gray-500 dark:text-gray-400">Starting from</span>
+                <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-gray-500 dark:text-gray-400">Flyobo Price</span>
+                    <span className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                      ₹{Number(packageData.Flyoboprice).toLocaleString()}
+                    </span>
+                  </div>
+                  {packageData.discount && (
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-500 dark:text-gray-400">Discount</span>
+                      <span className="text-sm font-medium text-green-600 dark:text-green-400">
+                        {packageData.discount}% OFF
+                      </span>
+                    </div>
+                  )}
+                  <div className="flex items-center justify-between pt-2 border-t border-gray-200 dark:border-gray-700">
+                    <span className="text-base font-medium text-gray-700 dark:text-gray-300">Final Price</span>
                     <div className="text-right">
-                      <p className="text-3xl font-bold text-primary">₹{packageData.price.toLocaleString()}</p>
+                      <p className="text-3xl font-bold text-primary">₹{(packageData.price).toLocaleString()}</p>
                       <p className="text-sm text-gray-500 dark:text-gray-400">per person</p>
                     </div>
                   </div>
