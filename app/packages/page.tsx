@@ -64,7 +64,7 @@ export default function PackagesPage() {
   const [searchTerm, setSearchTerm] = useState(searchQuery || '');
   const [filters, setFilters] = useState({
     location: locationParam || '',
-    priceRange: [0, 50000],
+    priceRange: [1660, 50000],
     duration: '',
     sortBy: 'recommended'
   });
@@ -204,7 +204,7 @@ export default function PackagesPage() {
   }, [filters, searchTerm]);
 
   return (
-    <div className="bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 min-h-screen">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       {/* Hero Section */}
       <div className="relative bg-sky-500 dark:bg-black text-gray-900 dark:text-white py-20 overflow-hidden">
         {/* Background Image Layer */}
@@ -221,164 +221,154 @@ export default function PackagesPage() {
           <div className="flex justify-center">
             <span className="h-1 w-28 bg-gradient-to-r from-sky-300 to-sky-600 rounded-full shadow-md"></span>
           </div>
-          <p className="max-w-2xl mx-auto text-lg text-gray-800 dark:text-white/90 leading-relaxed animate-fade-in delay-200">
+          <p className="max-w-2xl mx-auto text-lg text-white/90 leading-relaxed">
             Explore our handpicked selection of travel packages across India. <br />
             From serene beaches to majestic mountains, find your dream destination.
           </p>
         </div>
       </div>
 
-
       <div className="container mx-auto px-4 py-12">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Filters Sidebar */}
           <div className="w-full lg:w-1/4">
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 sticky top-24 border border-gray-100 dark:border-gray-700">
-              <div className="flex justify-between items-center mb-8">
-                <h2 className="text-xl font-semibold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 sticky top-24 border border-gray-100 dark:border-gray-700 space-y-6">
+
+              {/* Header */}
+              <div className="flex justify-between items-center">
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                   Refine Your Search
                 </h2>
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={resetFilters}
-                  className="text-gray-500 hover:text-primary dark:text-gray-400 dark:hover:text-primary transition-colors"
+                  className="text-gray-500 hover:text-sky-600 dark:text-gray-400 dark:hover:text-sky-400 transition-colors flex items-center"
                 >
                   <FilterX className="h-4 w-4 mr-1" />
                   Reset
                 </Button>
               </div>
 
-              <div className="space-y-8">
-                {/* Search */}
-                <div>
-                  <label className="block text-sm font-medium mb-3 text-gray-700 dark:text-gray-300">
-                    Search Packages
-                  </label>
-                  <div className="relative group">
-                    <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400 group-focus-within:text-primary transition-colors" />
-                    <Input
-                      type="text"
-                      placeholder="Search destinations..."
-                      className="pl-10 border-gray-200 dark:border-gray-700 focus:border-primary transition-colors"
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                  </div>
-                </div>
-
-                {/* Location Filter */}
-                <div>
-                  <label className="block text-sm font-medium mb-3 text-gray-700 dark:text-gray-300">
-                    Destination
-                  </label>
-                  <Select
-                    value={filters.location}
-                    onValueChange={(value) => setFilters({ ...filters, location: value })}
-                  >
-                    <SelectTrigger className="border-gray-200 dark:border-gray-700">
-                      <SelectValue placeholder="All destinations" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all-destinations">All Destinations</SelectItem>
-                      <SelectItem value="Andaman">Andaman</SelectItem>
-                      <SelectItem value="Bali">Bali</SelectItem>
-                      <SelectItem value="Bhutan">Bhutan</SelectItem>
-                      <SelectItem value="Chhattisgarh">Chhattisgarh</SelectItem>
-                      <SelectItem value="Dubai">Dubai</SelectItem>
-                      <SelectItem value="Goa">Goa</SelectItem>
-                      <SelectItem value="Gujarat">Gujarat</SelectItem>
-                      <SelectItem value="Himachal">Himachal Pradesh</SelectItem>
-                      <SelectItem value="Karnataka">Karnataka</SelectItem>
-                      <SelectItem value="Kashmir">Kashmir</SelectItem>
-                      <SelectItem value="Kerala">Kerala</SelectItem>
-                      <SelectItem value="Ladakh">Ladakh</SelectItem>
-                      <SelectItem value="Madhya Pradesh">Madhya Pradesh</SelectItem>
-                      <SelectItem value="Maharashtra">Maharashtra</SelectItem>
-                      <SelectItem value="Nepal">Nepal</SelectItem>
-                      <SelectItem value="North East">North East</SelectItem>
-                      <SelectItem value="Rajasthan">Rajasthan</SelectItem>
-                      <SelectItem value="Tamil Nadu">Tamil Nadu</SelectItem>
-                      <SelectItem value="Thailand">Thailand</SelectItem>
-                      <SelectItem value="Uttar Pradesh">Uttar Pradesh</SelectItem>
-                      <SelectItem value="Uttarakhand">Uttarakhand</SelectItem>
-                    </SelectContent>
-
-                  </Select>
-                </div>
-
-                {/* Price Range Filter */}
-                <div>
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-1 sm:gap-0">
-                    <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                      Price Range
-                    </label>
-                    <span className="text-sm font-semibold text-primary">
-                      ₹{filters?.priceRange?.[0]?.toLocaleString() ?? 0} - ₹{filters?.priceRange?.[1]?.toLocaleString() ?? 0}
-                    </span>
-                  </div>
-                  <Slider
-                    defaultValue={[0, 50000]}
-                    max={50000}
-                    step={1000}
-                    value={filters.priceRange}
-                    onValueChange={(value) => setFilters({ ...filters, priceRange: value })}
-                    className="py-4"
+              {/* Search */}
+              <div className="space-y-2">
+                <label htmlFor="package-search" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Search Packages
+                </label>
+                <div className="relative group">
+                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400 transition-colors group-focus-within:text-sky-600" />
+                  <Input
+                    id="package-search"
+                    type="text"
+                    placeholder="Search destinations..."
+                    className="pl-10 border border-gray-200 dark:border-gray-700 focus:border-sky-600 focus:ring-1 focus:ring-sky-600/20 transition-colors bg-white dark:bg-gray-900"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </div>
+              </div>
 
-                {/* Duration Filter */}
-                <div>
-                  <label className="block text-sm font-medium mb-3 text-gray-700 dark:text-gray-300">
-                    Duration
-                  </label>
-                  <Select
-                    value={filters.duration}
-                    onValueChange={(value) => setFilters({ ...filters, duration: value })}
-                  >
-                    <SelectTrigger className="border-gray-200 dark:border-gray-700">
-                      <SelectValue placeholder="Any duration" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="any-duration">Any duration</SelectItem>
-                      <SelectItem value="1-3">1-3 Days</SelectItem>
-                      <SelectItem value="4-6">4-6 Days</SelectItem>
-                      <SelectItem value="7-10">7-10 Days</SelectItem>
-                      <SelectItem value="10+">10+ Days</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+              {/* Destination Filter */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Destination
+                </label>
+                <Select
+                  value={filters.location}
+                  onValueChange={(value) => setFilters({ ...filters, location: value })}
+                >
+                  <SelectTrigger className="border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+                    <SelectValue placeholder="All destinations" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white dark:bg-gray-900">
+                    <SelectItem value="all-destinations">All Destinations</SelectItem>
+                    {[
+                      "Andaman", "Bali", "Bhutan", "Chhattisgarh", "Dubai", "Goa", "Gujarat", "Himachal",
+                      "Karnataka", "Kashmir", "Kerala", "Ladakh", "Madhya Pradesh", "Maharashtra", "Nepal",
+                      "North East", "Rajasthan", "Tamil Nadu", "Thailand", "Uttar Pradesh", "Uttarakhand"
+                    ].map((place) => (
+                      <SelectItem key={place} value={place}>
+                        {place}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
 
-                {/* Sort By */}
-                <div>
-                  <label className="block text-sm font-medium mb-3 text-gray-700 dark:text-gray-300">
-                    Sort By
+              {/* Price Filter */}
+              <div className="bg-gray-50 dark:bg-gray-900/50 p-4 rounded-lg space-y-3">
+                <div className="flex justify-between items-center">
+                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Price Range
                   </label>
-                  <Select
-                    value={filters.sortBy}
-                    onValueChange={(value) => setFilters({ ...filters, sortBy: value })}
-                  >
-                    <SelectTrigger className="border-gray-200 dark:border-gray-700">
-                      <SelectValue placeholder="Recommended" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="recommended">Recommended</SelectItem>
-                      <SelectItem value="price-low">Price: Low to High</SelectItem>
-                      <SelectItem value="price-high">Price: High to Low</SelectItem>
-                      <SelectItem value="rating">Highest Rated</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <span className="text-sm font-medium text-sky-600 dark:text-sky-400">
+                    ₹{filters?.priceRange?.[0]?.toLocaleString() ?? 0} – ₹{filters?.priceRange?.[1]?.toLocaleString() ?? 0}
+                  </span>
                 </div>
+                <Slider
+                  defaultValue={[1660, 50000]}
+                  max={50000}
+                  step={1000}
+                  value={filters.priceRange}
+                  onValueChange={(value) => setFilters({ ...filters, priceRange: value })}
+                  className="pt-2"
+                />
+              </div>
+
+              {/* Duration Filter */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Duration
+                </label>
+                <Select
+                  value={filters.duration}
+                  onValueChange={(value) => setFilters({ ...filters, duration: value })}
+                >
+                  <SelectTrigger className="border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+                    <SelectValue placeholder="Any duration" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white dark:bg-gray-900">
+                    <SelectItem value="any-duration">Any Duration</SelectItem>
+                    <SelectItem value="1-3">1–3 Days</SelectItem>
+                    <SelectItem value="4-6">4–6 Days</SelectItem>
+                    <SelectItem value="7-10">7–10 Days</SelectItem>
+                    <SelectItem value="10+">10+ Days</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Sort Filter */}
+              <div className="space-y-2">
+                <label htmlFor="sort-by" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Sort By
+                </label>
+                <Select
+                  value={filters.sortBy}
+                  onValueChange={(value) => setFilters({ ...filters, sortBy: value })}
+                >
+                  <SelectTrigger
+                    id="sort-by"
+                    className="w-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-sm focus:border-sky-600 focus:ring-1 focus:ring-sky-600/20 transition-colors"
+                  >
+                    <SelectValue placeholder="Recommended" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white dark:bg-gray-900 text-sm">
+                    <SelectItem value="recommended">Recommended</SelectItem>
+                    <SelectItem value="price-low">Price: Low to High</SelectItem>
+                    <SelectItem value="price-high">Price: High to Low</SelectItem>
+                    <SelectItem value="rating">Highest Rated</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
           </div>
 
           {/* Package Listings */}
           <div className="w-full lg:w-3/4">
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-8 border border-gray-100 dark:border-gray-700">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-8 border border-gray-100 dark:border-gray-700">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                  <h2 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
+                  <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
                     {isLoading ? (
                       <div className="h-8 w-48 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
                     ) : (
@@ -397,7 +387,7 @@ export default function PackagesPage() {
                     value={filters.sortBy}
                     onValueChange={(value) => setFilters({ ...filters, sortBy: value })}
                   >
-                    <SelectTrigger className="w-[180px] border-gray-200 dark:border-gray-700">
+                    <SelectTrigger className="w-[180px] border border-gray-200 dark:border-gray-700">
                       <SelectValue placeholder="Recommended" />
                     </SelectTrigger>
                     <SelectContent>
@@ -421,32 +411,27 @@ export default function PackagesPage() {
               <>
                 <div id="packages-section" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {currentPackages.map((pkg) => (
-                    <Card key={pkg.id} className="overflow-hidden transition-all duration-300 hover:shadow-xl border border-gray-100 dark:border-gray-700 group">
+                    <Card key={pkg.id} className="overflow-hidden transition-all duration-300 hover:shadow-md border border-gray-100 dark:border-gray-700 group">
 
                       {/* Image Section with Validity Badge */}
                       <div className="relative h-48 w-full overflow-hidden">
                         {/* Package Validity Badge */}
                         {pkg.Packagevalidity && (
-                          <div className="absolute top-4 left-4 bg-black/50 dark:bg-gray-800/50 backdrop-blur-sm text-white text-xs font-medium px-3 py-1.5 rounded-full z-10">
+                          <div className="absolute top-4 left-4 bg-black/40 dark:bg-gray-800/40 backdrop-blur-sm text-white text-xs font-medium px-3 py-1.5 rounded-full z-10">
                             {pkg.Packagevalidity}
                           </div>
                         )}
                         <img
                           src={pkg.image}
                           alt={pkg.name}
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-
-                        {/*<div className="absolute top-4 right-4 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full px-3 py-1 text-sm font-medium flex items-center">
-                          <Star className="h-4 w-4 text-yellow-400 mr-1" />
-                          <span>{pkg.rating}</span>
-                        </div>*/}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                       </div>
 
                       <CardHeader className="pb-2">
                         <h3
-                          className="text-lg font-bold group-hover:text-primary transition-colors leading-snug overflow-hidden break-words"
+                          className="text-lg font-semibold group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors leading-snug overflow-hidden break-words"
                           style={{
                             display: "-webkit-box",
                             WebkitLineClamp: 2,
@@ -459,25 +444,38 @@ export default function PackagesPage() {
 
                       <CardContent className="pb-4">
                         <div className="flex items-center text-gray-600 dark:text-gray-400 mb-2">
-                          <MapPin className="h-4 w-4 mr-2 text-primary" />
+                          <MapPin className="h-4 w-4 mr-2 text-sky-600 dark:text-sky-400" />
                           <span className="text-sm">{pkg.location}</span>
                         </div>
                         <div className="flex items-center text-gray-600 dark:text-gray-400 mb-3">
-                          <Clock className="h-4 w-4 mr-2 text-primary" />
-                          <span className="text-sm font-medium tracking-wide bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
+                          <Clock className="h-4 w-4 mr-2 text-sky-600 dark:text-sky-400" />
+                          <span className="text-sm font-medium">
                             {(pkg.Titleref.split('-')[1]?.trim() || pkg.Titleref).replace(/^"+|"+$/g, "")}
                           </span>
-                        </div>{/*
-                        <p className="text-gray-700 dark:text-gray-300 line-clamp-2 text-sm">
-                          {pkg.Itinerary.replace(/^"+|"+$/g, "").replace(/""/g, "")}
-                        </p>*/}
+                        </div>
+                        {/* Price Section */}
+                        <div className="mt-4 space-y-2">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm text-gray-500 dark:text-gray-400">Actual Price:</span>
+                              <span className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                                ₹{Number(pkg.Flyoboprice).toLocaleString()}
+                              </span>
+                            </div>
+                            {pkg.discount && (
+                              <div className="bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-2.5 py-1 rounded-full text-xs font-medium">
+                                {pkg.discount}% OFF
+                              </div>
+                            )}
+                          </div>
+                        </div>
                       </CardContent>
 
                       <CardFooter className="flex justify-between items-center pt-0">
                         <div className="flex flex-wrap gap-1">
-                          <p className="text-lg font-bold text-primary">₹{pkg.price.toLocaleString()}</p>
+                          <p className="text-lg font-semibold text-sky-600 dark:text-sky-400">₹{pkg.price.toLocaleString()}</p>
                         </div>
-                        <Button asChild size="sm" className="gap-2">
+                        <Button asChild size="sm" className="gap-2 bg-sky-600 hover:bg-sky-700 dark:bg-sky-500 dark:hover:bg-sky-600">
                           <Link href={`/packages/${pkg.slug}`}>
                             View Details
                             <ArrowRight className="h-4 w-4" />
@@ -504,7 +502,7 @@ export default function PackagesPage() {
                           size="icon"
                           onClick={() => handlePageChange(currentPage - 1)}
                           disabled={currentPage === 1}
-                          className="rounded-full hover:bg-primary/10 hover:text-primary transition-colors disabled:opacity-50 disabled:hover:bg-transparent"
+                          className="rounded-full hover:bg-sky-50 hover:text-sky-600 dark:hover:bg-gray-700 dark:hover:text-sky-400 transition-colors disabled:opacity-50 disabled:hover:bg-transparent"
                         >
                           <ChevronLeft className="h-4 w-4" />
                         </Button>
@@ -518,7 +516,6 @@ export default function PackagesPage() {
                               pageNumber === totalPages ||
                               (pageNumber >= currentPage - 1 && pageNumber <= currentPage + 1);
 
-                            // Track if ellipsis was already rendered
                             let shouldRenderEllipsis = false;
                             const prevIsEllipsis =
                               index > 0 &&
@@ -540,8 +537,8 @@ export default function PackagesPage() {
                                   variant={isCurrent ? "default" : "outline"}
                                   aria-label={`Go to page ${pageNumber}`}
                                   className={`rounded-full min-w-[40px] h-10 transition-all ${isCurrent
-                                    ? "bg-primary text-white hover:bg-primary/90 dark:bg-grey-500 dark:hover:bg-grey-300"
-                                    : "hover:bg-primary/10 hover:text-primary dark:hover:bg-grey-600 dark:hover:text-white"
+                                      ? "bg-sky-600 text-white hover:bg-sky-700 dark:bg-sky-500 dark:hover:bg-sky-600"
+                                      : "hover:bg-sky-50 hover:text-sky-600 dark:hover:bg-gray-700 dark:hover:text-sky-400"
                                     }`}
                                 >
                                   {pageNumber}
@@ -565,13 +562,12 @@ export default function PackagesPage() {
                           })}
                         </div>
 
-
                         <Button
                           variant="outline"
                           size="icon"
                           onClick={() => handlePageChange(currentPage + 1)}
                           disabled={currentPage === totalPages}
-                          className="rounded-full hover:bg-primary/10 hover:text-primary transition-colors disabled:opacity-50 disabled:hover:bg-transparent"
+                          className="rounded-full hover:bg-sky-50 hover:text-sky-600 dark:hover:bg-gray-700 dark:hover:text-sky-400 transition-colors disabled:opacity-50 disabled:hover:bg-transparent"
                         >
                           <ChevronRight className="h-4 w-4" />
                         </Button>
@@ -581,11 +577,11 @@ export default function PackagesPage() {
                 )}
               </>
             ) : (
-              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-12 text-center border border-gray-100 dark:border-gray-700">
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-12 text-center border border-gray-100 dark:border-gray-700">
                 <div className="mb-6 text-gray-400">
                   <Search className="h-16 w-16 mx-auto animate-bounce" />
                 </div>
-                <h3 className="text-2xl font-bold mb-3 bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
+                <h3 className="text-2xl font-semibold mb-3 text-gray-900 dark:text-white">
                   No packages found
                 </h3>
                 <p className="text-gray-500 dark:text-gray-400 mb-8 max-w-md mx-auto">
@@ -593,7 +589,7 @@ export default function PackagesPage() {
                 </p>
                 <Button
                   onClick={resetFilters}
-                  className="bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-full transition-colors"
+                  className="bg-sky-600 hover:bg-sky-700 dark:bg-sky-500 dark:hover:bg-sky-600 text-white px-6 py-2 rounded-lg transition-colors"
                 >
                   Reset Filters
                 </Button>
