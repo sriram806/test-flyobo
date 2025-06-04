@@ -221,7 +221,7 @@ export default function PackagesPage() {
           <div className="flex justify-center">
             <span className="h-1 w-28 bg-gradient-to-r from-sky-300 to-sky-600 rounded-full shadow-md"></span>
           </div>
-          <p className="max-w-2xl mx-auto text-lg text-white/90 leading-relaxed">
+          <p className="max-w-2xl mx-auto text-black-100 dark:text-white text-lg leading-relaxed text-center">
             Explore our handpicked selection of travel packages across India. <br />
             From serene beaches to majestic mountains, find your dream destination.
           </p>
@@ -464,7 +464,7 @@ export default function PackagesPage() {
                             </div>
                             {pkg.discount && (
                               <div className="bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-2.5 py-1 rounded-full text-xs font-medium">
-                                {pkg.discount}% OFF
+                                {pkg.discount} OFF
                               </div>
                             )}
                           </div>
