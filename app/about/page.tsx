@@ -1,6 +1,11 @@
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
+export const metadata = {
+  title: 'About Us - FlyOBO',
+  description: 'Learn about our story, mission, and the team behind FlyOBO.',
+};
+
 export default function AboutPage() {
   return (
     <div className="bg-gray-50 dark:bg-gray-900 min-h-screen">

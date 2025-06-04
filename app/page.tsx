@@ -4,6 +4,11 @@ import { DestinationHighlights } from '@/components/home/destination-highlights'
 import { FAQSection } from '@/components/home/faq-section';
 import { Newsletter } from '@/components/home/newsletter';
 
+export const metadata = {
+  title: 'FlyOBO - Fly Off,Break Out',
+  description: 'Discover the best travel packages across India with FlyOBO. Explore stunning destinations, book hassle-free trips, and create unforgettable memories.',
+};
+
 export default function Home() {
   return (
     <>
