@@ -14,7 +14,7 @@ import {
   SelectValue 
 } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
-import { ArrowRight, Star, MapPin, Clock, Search, FilterX } from 'lucide-react';
+import { ArrowRight, Star, MapPin, Clock, Search, FilterX, Filter } from 'lucide-react';
 import { travelPackages, TravelPackage } from '@/lib/data';
 
 export default function PackagesPage() {
@@ -25,6 +25,7 @@ export default function PackagesPage() {
   const [packages, setPackages] = useState<TravelPackage[]>([]);
   const [filteredPackages, setFilteredPackages] = useState<TravelPackage[]>([]);
   const [searchTerm, setSearchTerm] = useState(searchQuery || '');
+  const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState({
     location: locationParam || '',
     priceRange: [1500, 50000],
@@ -122,20 +123,42 @@ export default function PackagesPage() {
       
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
+          {/* Mobile Filter Toggle */}
+          <div className="lg:hidden">
+            <Button
+              onClick={() => setShowFilters(!showFilters)}
+              variant="outline"
+              className="w-full mb-4"
+            >
+              <Filter className="h-4 w-4 mr-2" />
+              {showFilters ? 'Hide Filters' : 'Show Filters'}
+            </Button>
+          </div>
+
           {/* Filters Sidebar */}
-          <div className="w-full lg:w-1/4">
+          <div className={`w-full lg:w-1/4 ${showFilters ? 'block' : 'hidden lg:block'}`}>
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 sticky top-24">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-lg font-semibold">Filters</h2>
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  onClick={resetFilters}
-                  className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-                >
-                  <FilterX className="h-4 w-4 mr-1" />
-                  Reset
-                </Button>
+                <div className="flex items-center gap-2">
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={resetFilters}
+                    className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                  >
+                    <FilterX className="h-4 w-4 mr-1" />
+                    Reset
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setShowFilters(false)}
+                    className="lg:hidden text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                  >
+                    ✕
+                  </Button>
+                </div>
               </div>
               
               <div className="space-y-6">
@@ -268,6 +291,15 @@ export default function PackagesPage() {
                   )}
                 </div>
                 <div className="flex items-center gap-2">
+                  <Button
+                    onClick={() => setShowFilters(!showFilters)}
+                    variant="outline"
+                    size="sm"
+                    className="lg:hidden"
+                  >
+                    <Filter className="h-4 w-4 mr-1" />
+                    Filters
+                  </Button>
                   <span className="text-sm text-gray-500 dark:text-gray-400">Sort by:</span>
                   <Select 
                     value={filters.sortBy} 
