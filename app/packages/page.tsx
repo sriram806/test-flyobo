@@ -27,7 +27,7 @@ export default function PackagesPage() {
   const [searchTerm, setSearchTerm] = useState(searchQuery || '');
   const [filters, setFilters] = useState({
     location: locationParam || '',
-    priceRange: [0, 50000],
+    priceRange: [1500, 50000],
     duration: '',
     sortBy: 'recommended'
   });
@@ -101,7 +101,7 @@ export default function PackagesPage() {
   const resetFilters = () => {
     setFilters({
       location: '',
-      priceRange: [0, 50000],
+      priceRange: [1500, 50000],
       duration: '',
       sortBy: 'recommended'
     });
@@ -190,14 +190,21 @@ export default function PackagesPage() {
                       ₹{filters.priceRange[0].toLocaleString()} - ₹{filters.priceRange[1].toLocaleString()}
                     </span>
                   </div>
-                  <Slider
-                    defaultValue={[0, 50000]}
-                    max={50000}
-                    step={1000}
-                    value={filters.priceRange}
-                    onValueChange={(value) => setFilters({ ...filters, priceRange: value })}
-                    className="py-4"
-                  />
+                  <div className="px-2 py-4">
+                    <Slider
+                      defaultValue={[1500, 50000]}
+                      min={1500}
+                      max={50000}
+                      step={1000}
+                      value={filters.priceRange}
+                      onValueChange={(value) => setFilters({ ...filters, priceRange: value })}
+                      className="w-full"
+                    />
+                  </div>
+                  <div className="flex justify-between text-xs text-gray-500 mt-1">
+                    <span>₹1,500</span>
+                    <span>₹50,000</span>
+                  </div>
                 </div>
                 
                 {/* Duration Filter */}
@@ -254,7 +261,7 @@ export default function PackagesPage() {
                   <h2 className="text-lg font-semibold">
                     {filteredPackages.length} Packages Found
                   </h2>
-                  {(searchTerm || filters.location || filters.duration || filters.priceRange[0] > 0 || filters.priceRange[1] < 50000) && (
+                  {(searchTerm || filters.location || filters.duration || filters.priceRange[0] > 1500 || filters.priceRange[1] < 50000) && (
                     <p className="text-sm text-gray-500 dark:text-gray-400">
                       Showing filtered results
                     </p>
