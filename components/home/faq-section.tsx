@@ -2,12 +2,7 @@
 
 import { useState } from 'react';
 import { faqData } from '@/lib/data';
-import { 
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger 
-} from '@/components/ui/accordion';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
 export function FAQSection() {
   const [expandedItems, setExpandedItems] = useState<string[]>([]);

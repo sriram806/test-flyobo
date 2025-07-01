@@ -16,7 +16,6 @@ import {
 import { Slider } from '@/components/ui/slider';
 import { ArrowRight, Star, MapPin, Clock, Search, FilterX, ChevronLeft, ChevronRight } from 'lucide-react';
 import { travelPackages, TravelPackage } from '@/lib/data';
-import { CalendarIcon } from 'lucide-react';
 
 // Skeleton Card Component
 const PackageCardSkeleton = () => (

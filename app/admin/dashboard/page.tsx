@@ -126,9 +126,6 @@ export default function AdminDashboardPage() {
     <div className="flex min-h-screen">
       {/* Sidebar */}
       <div className="hidden md:flex flex-col w-64 bg-gray-900 text-white">
-        <div className="p-4 border-b border-gray-800">
-          <h2 className="text-xl font-bold">TravelEase Admin</h2>
-        </div>
         <div className="flex-1 overflow-y-auto py-4">
           <nav className="px-2 space-y-1">
             <Link 

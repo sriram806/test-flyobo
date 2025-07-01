@@ -663,7 +663,7 @@ export default function PackageDetail() {
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-gray-500 dark:text-gray-400">Discount</span>
                       <span className="text-sm font-medium text-green-600 dark:text-green-400">
-                        {packageData.discount}% OFF
+                        {packageData.discount} OFF
                       </span>
                     </div>
                   )}
