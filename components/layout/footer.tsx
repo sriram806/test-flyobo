@@ -89,7 +89,7 @@ export function Footer() {
         {/* Bottom Line */}
         <div className="mt-12 border-t border-gray-800 pt-6">
           <p className="text-center text-xs text-gray-500">
-            &copy; {new Date().getFullYear()} TravelEase. All rights reserved.
+            &copy; {new Date().getFullYear()} Flyobo (Swagatom World LLP). All rights reserved.
           </p>
         </div>
       </div>
